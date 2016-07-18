@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
     public float RotationSpeed;
 
     private Rigidbody _rb;
+
+    //dash variables
+    public float DashCooldown;
+    private bool _dashOnCooldown;
     private bool _isDashing;
 
 	// Use this for initialization
@@ -15,7 +19,14 @@ public class PlayerController : MonoBehaviour
 	{
 	    _rb = GetComponent<Rigidbody>();
 	}
-    
+
+    void Update()
+    {
+        //should be checked in update.
+        if (Input.GetButton("Dash"))
+            _isDashing = true;
+    }
+ 
 	// Update is called once per frame
 	void FixedUpdate()
 	{
@@ -23,7 +34,7 @@ public class PlayerController : MonoBehaviour
         DashCheck();
 	}
 
-    void MoveCheck()
+    private void MoveCheck()
     {
         //get movement input.
         float hor = Input.GetAxis("Horizontal");
@@ -39,18 +50,26 @@ public class PlayerController : MonoBehaviour
         Rotate(targetRotation);
     }
 
-    void DashCheck()
+    private void DashCheck()
     {
-        if (_isDashing)
+        if (!_dashOnCooldown && _isDashing)
         {
-            //Dash
+            //Dash, and start the cooldown.
             _rb.AddForce(_rb.velocity * DashStrength);
+            _dashOnCooldown = true;
+            Invoke("ResetDashCoolDown", DashCooldown);
         }
     }
+
 
     void Rotate(Vector3 targetRotation) 
     {
         Vector3 newRotation = Vector3.RotateTowards(_rb.transform.forward, targetRotation, RotationSpeed, 0.0f);
         _rb.transform.rotation = Quaternion.LookRotation(newRotation);
+    }
+
+    private void ResetDashCoolDown()
+    {
+        _dashOnCooldown = false;
     }
 }
