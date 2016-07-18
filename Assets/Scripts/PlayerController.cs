@@ -7,15 +7,15 @@ public class PlayerController : MonoBehaviour
     public float DashStrength;
 
     private Rigidbody _rb;
+    private bool _isDashing;
 
 	// Use this for initialization
 	void Start ()
 	{
 	    _rb = GetComponent<Rigidbody>();
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    void FixedUpdate ()
 	{
         MoveCheck();
         DashCheck();
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     void DashCheck()
     {
-        if (Input.GetKeyDown("space"))
+        if (_isDashing)
         {
             //Dash
             _rb.AddForce(_rb.velocity * DashStrength);
