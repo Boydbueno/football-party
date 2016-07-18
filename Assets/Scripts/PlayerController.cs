@@ -14,11 +14,10 @@ public class PlayerController : MonoBehaviour
     private bool _isDashing;
 
 	// Use this for initialization
-	void Start ()
+	void Start()
 	{
 	    _rb = GetComponent<Rigidbody>();
 	}
-
 
     void Update()
     {
@@ -27,7 +26,9 @@ public class PlayerController : MonoBehaviour
             _isDashing = true;
 
     }
-	void FixedUpdate ()
+ 
+	// Update is called once per frame
+	void FixedUpdate()
 	{
         MoveCheck();
         DashCheck();
