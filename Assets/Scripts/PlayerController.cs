@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public float Speed;
     public float DashStrength;
+    public float RotationSpeed;
 
     private Rigidbody _rb;
     private bool _isDashing;
@@ -28,9 +29,14 @@ public class PlayerController : MonoBehaviour
         float hor = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(hor, 0.0f, vert);
+        Vector3 targetRotation = new Vector3(hor, 0.0f, vert);
 
-        _rb.AddForce(movement * Speed);
+        if (hor != 0 || vert != 0) 
+        {
+            _rb.AddForce(_rb.transform.forward * Speed);
+        }
+
+        Rotate(targetRotation);
     }
 
     void DashCheck()
@@ -40,5 +46,11 @@ public class PlayerController : MonoBehaviour
             //Dash
             _rb.AddForce(_rb.velocity * DashStrength);
         }
+    }
+
+    void Rotate(Vector3 targetRotation) 
+    {
+        Vector3 newRotation = Vector3.RotateTowards(_rb.transform.forward, targetRotation, RotationSpeed, 0.0f);
+        _rb.transform.rotation = Quaternion.LookRotation(newRotation);
     }
 }
