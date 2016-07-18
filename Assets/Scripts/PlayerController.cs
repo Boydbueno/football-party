@@ -9,13 +9,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
 
 	// Use this for initialization
-	void Start ()
+	void Start()
 	{
 	    _rb = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate()
 	{
         MoveCheck();
         DashCheck();
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     void DashCheck()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetButtonDown("Dash"))
         {
             //Dash
             _rb.AddForce(_rb.velocity * DashStrength);
