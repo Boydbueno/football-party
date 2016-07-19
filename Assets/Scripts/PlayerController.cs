@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         if (_isDashing && other.gameObject.tag == "Ball")
         {
             Vector3 direction = other.transform.position - transform.position;
-            other.rigidbody.AddForce(direction * DashToBallForce);
+            other.GetComponent<Rigidbody>().AddForce(direction * DashToBallForce);
             Console.WriteLine("Should add extra force to ball");
         }
     }

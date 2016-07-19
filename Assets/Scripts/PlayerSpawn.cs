@@ -7,15 +7,22 @@ public class PlayerSpawn : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        
+        int activeControllers = GetActiveControllers();
+        for (int i = 0; i < activeControllers; i++)
+        {
+            SpawnPlayer(i);
+        }
     }
 
-    void GetActiveControllers()
+    // Returns amount of active controllers
+    int GetActiveControllers()
     {
         string[] activeControllers = Input.GetJoystickNames();
-        Debug.Log(activeControllers.Length);
+        return activeControllers.Length;
     }
-    void SpawnPlayer()
+
+    // Spawns a Player, with appropriate parameters
+    void SpawnPlayer(int number)
     {
         GameObject player = Instantiate(playerObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
@@ -27,6 +34,6 @@ public class PlayerSpawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        GetActiveControllers();
+        
     }
 }
