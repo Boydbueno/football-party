@@ -7,7 +7,7 @@ public class PlayerSpawn : MonoBehaviour {
 
     public int playerAmount;
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         for (int i = 0; i < playerAmount; i++)
         {
@@ -27,6 +27,9 @@ public class PlayerSpawn : MonoBehaviour {
     {
         GameObject player = Instantiate(playerObject, new Vector3(1, 0, 1), Quaternion.identity) as GameObject;
         PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
+
+        playerScript.Speed = 80;
+        playerScript.RotationSpeed = 0.4f;
         playerScript.playerNumber = playerNumber.ToString();
     }
 }
