@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 
@@ -77,13 +78,14 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    void OncolOnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
         //apply extra force when dashing.
         if (_isDashing && other.gameObject.tag == "Ball")
         {
             Vector3 direction = other.transform.position - transform.position;
             other.rigidbody.AddForce(direction * DashToBallForce);
+            Console.WriteLine("Should add extra force to ball");
         }
     }
 }
