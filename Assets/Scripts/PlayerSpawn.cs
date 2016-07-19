@@ -5,10 +5,11 @@ public class PlayerSpawn : MonoBehaviour {
 
     public Object playerObject;
 
-    void Start()
+    public int playerAmount;
+    // Use this for initialization
+    void Awake()
     {
-        int activeControllers = GetActiveControllers();
-        for (int i = 0; i < activeControllers; i++)
+        for (int i = 0; i < playerAmount; i++)
         {
             SpawnPlayer(i+1);
         }
@@ -24,7 +25,7 @@ public class PlayerSpawn : MonoBehaviour {
     // Spawns a Player, with appropriate playerNumber
     void SpawnPlayer(int playerNumber)
     {
-        GameObject player = Instantiate(playerObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        GameObject player = Instantiate(playerObject, new Vector3(1, 0, 1), Quaternion.identity) as GameObject;
         PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
         playerScript.playerNumber = playerNumber.ToString();
     }
