@@ -15,6 +15,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private float _moveHor, _moveVert;
     private DashController _dash;
+
+    void OnCollisionEnter(Collision collision) 
+    {
+        if (collision.gameObject.tag == "Ball") 
+        {
+            // If we ever want to add a force to the ball on collision, we can do that here.
+        }
+    }
     
 	void Start()
 	{
