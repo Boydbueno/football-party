@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float DashStrength;
     public float DashToBallForce; // Doesn't work yet //TODO
     public float DashCooldown;
+    public string playerNumber; 
 
     public Animator Animator;
 
@@ -31,9 +32,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get input.
-        _isDashing = Input.GetButtonDown("Dash") && !_dashOnCooldown;
-        _moveHor = Input.GetAxis("Horizontal");
-        _moveVert = Input.GetAxis("Vertical");
+            _isDashing = Input.GetButtonDown("Dash"+ playerNumber) && !_dashOnCooldown;
+            _moveHor = Input.GetAxis("Horizontal"+ playerNumber);
+            _moveVert = Input.GetAxis("Vertical"+ playerNumber);
+        
+
     }
 
     #region FixedUpdate

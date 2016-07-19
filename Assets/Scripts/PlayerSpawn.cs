@@ -10,7 +10,7 @@ public class PlayerSpawn : MonoBehaviour {
         int activeControllers = GetActiveControllers();
         for (int i = 0; i < activeControllers; i++)
         {
-            SpawnPlayer(i);
+            SpawnPlayer(i+1);
         }
     }
 
@@ -22,7 +22,7 @@ public class PlayerSpawn : MonoBehaviour {
     }
 
     // Spawns a Player, with appropriate parameters
-    void SpawnPlayer(int number)
+    void SpawnPlayer(int playerNumber)
     {
         GameObject player = Instantiate(playerObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
@@ -30,6 +30,7 @@ public class PlayerSpawn : MonoBehaviour {
         playerScript.RotationSpeed = 0.4f;
         playerScript.DashStrength = 100;
         playerScript.DashCooldown = 0.5f;
+        playerScript.playerNumber = playerNumber.ToString();
     }
 	
 	// Update is called once per frame
