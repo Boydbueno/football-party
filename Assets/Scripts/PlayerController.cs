@@ -32,18 +32,20 @@ public class PlayerController : MonoBehaviour
 
     #region FixedUpdate
     void FixedUpdate()
-	{ 
-        ApplyMovement();
+	{
+        float movementSpeed = Math.Abs(_moveHor) > Math.Abs(_moveVert) ? Math.Abs(_moveHor) : Math.Abs(_moveVert);
+
+        ApplyMovement(movementSpeed);
 
         //Modify animation speed
-        Animator.SetFloat("Speed", (Math.Abs(_moveHor) + Math.Abs(_moveVert)) / 2);
+        Animator.SetFloat("Speed", movementSpeed);
 
         //apply rotation
         Vector3 targetRotation = new Vector3(_moveHor, 0.0f, _moveVert);
         Rotate(targetRotation);
     }
 
-    private void ApplyMovement()
+    private void ApplyMovement(float movementSpeed)
     {
         //if charging our dash stops our movement, and dash is charging, we don't move. :O :O
         if (DashChargeStopsMovement && _dash.IsCharging()) return;
