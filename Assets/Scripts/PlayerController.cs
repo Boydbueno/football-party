@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
             _rb.AddForce(_rb.transform.forward * Speed);
 
         //Modify animation speed
-        Animator.SetFloat("Speed", (Math.Abs(_moveHor) + Math.Abs(_moveVert)) / 2);
+        float movementspeed = (Math.Abs(_moveHor) > Math.Abs(_moveVert)) ? Math.Abs(_moveHor) : Math.Abs(_moveVert);
+        Animator.SetFloat("Speed", movementspeed);
 
         //apply rotation
         Vector3 targetRotation = new Vector3(_moveHor, 0.0f, _moveVert);
