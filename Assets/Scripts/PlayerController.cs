@@ -32,11 +32,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get input.
-            _isDashing = Input.GetButtonDown("Dash"+ playerNumber) && !_dashOnCooldown;
-            _moveHor = Input.GetAxis("Horizontal"+ playerNumber);
-            _moveVert = Input.GetAxis("Vertical"+ playerNumber);
-        
-
+        _isDashing = Input.GetButtonDown("Dash"+ playerNumber) && !_dashOnCooldown;
+        _moveHor = Input.GetAxis("Horizontal"+ playerNumber);
+        _moveVert = Input.GetAxis("Vertical"+ playerNumber);
     }
 
     #region FixedUpdate
