@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Xml.Schema;
 
 public class DashController : MonoBehaviour {
 
     //publics
     public float ForceMin, ForceMax;
-    public int DashChargeMaxTime; //After how many frames since we started charging the dash, do we achieve max dashing charge.
+    public float DashChargeMaxTime; //After how many frames since we started charging the dash, do we achieve max dashing charge.
     public float Cooldown;
     
 
     //privates
     private bool _onCooldown;
     private bool _dashButtonDown;
-    public float _charge;
-    private float _chargeIncrement;
+    public float _chargeTime;
 
     //variables we get from other components.
     private string _playerNumber;
@@ -23,8 +23,6 @@ public class DashController : MonoBehaviour {
     {
         _playerNumber = GetComponent<PlayerController>().playerNumber;
         _rb = GetComponent<Rigidbody>();
-
-        _chargeIncrement = (ForceMax - ForceMin) / DashChargeMaxTime;
         ResetCharge();
     }
 	
@@ -39,30 +37,32 @@ public class DashController : MonoBehaviour {
         if (_onCooldown) return;
 
         if (_dashButtonDown)
-            AddCharge();
-        else if(_charge >= ForceMin) //we pressed last check, and have now released.
+            UpdateChargeTime();
+        else //we pressed last check, and have now released.
             Dash();
     }
 
     //returns true if the player is charging his dash.
     public bool IsCharging()
     {
-        return _charge >= ForceMin;
+        return _chargeTime > ForceMin;
     }
 
-    //adds charge(clamps to forceMax).
-    private void AddCharge()
+    //updates charge timer
+    private void UpdateChargeTime()
     {
-        _charge += _chargeIncrement*Time.deltaTime;
+        
+        _chargeTime += Time.deltaTime / DashChargeMaxTime;
         //clamp
-        if (_charge > ForceMax)
-            _charge = ForceMax;
+        if (_chargeTime > 1)
+            _chargeTime = 1;
     }
 
     //the actual dashing. 
     private void Dash()
     {
-        _rb.AddForce(_rb.transform.forward * _charge);
+        float charge = Mathf.Lerp(ForceMin, ForceMax, _chargeTime);
+        _rb.AddForce(_rb.transform.forward * charge);
         ResetCharge();
         StartCooldown();
     }
@@ -70,7 +70,7 @@ public class DashController : MonoBehaviour {
     //resets the charge.
     private void ResetCharge()
     {
-        _charge = ForceMin;
+        _chargeTime = 0;
     }
 
     #region Cooldown

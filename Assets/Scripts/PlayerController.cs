@@ -2,21 +2,25 @@
 using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
     public float Speed;
     public float RotationSpeed;
-    public string playerNumber; 
+    public string playerNumber;
+    public bool DashChargeStopsMovement;
     public Animator Animator;
 
     private Rigidbody _rb;
     private float _moveHor, _moveVert;
+    private DashController _dash;
 
 	// Use this for initialization
 	void Start()
 	{
 	    _rb = GetComponent<Rigidbody>();
+	    _dash = GetComponent<DashController>();
 	}
 
     void Update()
@@ -28,10 +32,8 @@ public class PlayerController : MonoBehaviour
 
     #region FixedUpdate
     void FixedUpdate()
-	{
-        //add forward movement only when input is given. 
-        if (_moveHor != 0 || _moveVert != 0)
-            _rb.AddForce(_rb.transform.forward * Speed);
+	{ 
+        ApplyMovement();
 
         //Modify animation speed
         Animator.SetFloat("Speed", (Math.Abs(_moveHor) + Math.Abs(_moveVert)) / 2);
@@ -39,6 +41,16 @@ public class PlayerController : MonoBehaviour
         //apply rotation
         Vector3 targetRotation = new Vector3(_moveHor, 0.0f, _moveVert);
         Rotate(targetRotation);
+    }
+
+    private void ApplyMovement()
+    {
+        //if charging our dash stops our movement, and dash is charging, we don't move. :O :O
+        if (DashChargeStopsMovement && _dash.IsCharging()) return;
+
+        //add forward movement only when input is given.
+        if (_moveHor != 0 || _moveVert != 0)
+            _rb.AddForce(_rb.transform.forward * Speed);
     }
 
     //Rotate the player to the target.
