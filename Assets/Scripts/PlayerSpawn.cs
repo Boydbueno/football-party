@@ -10,6 +10,14 @@ public class PlayerSpawn : MonoBehaviour {
         
     }
 
+    void GetActiveControllers()
+    {
+        string[] activeControllers = Input.GetJoystickNames();
+        foreach(string activeController in activeControllers)
+        {
+            Debug.Log(activeController);
+        }
+    }
     void SpawnPlayer()
     {
         GameObject player = Instantiate(playerObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
