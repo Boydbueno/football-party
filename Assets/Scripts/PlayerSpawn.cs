@@ -13,10 +13,7 @@ public class PlayerSpawn : MonoBehaviour {
     void GetActiveControllers()
     {
         string[] activeControllers = Input.GetJoystickNames();
-        foreach(string activeController in activeControllers)
-        {
-            Debug.Log(activeController);
-        }
+        Debug.Log(activeControllers.Length);
     }
     void SpawnPlayer()
     {
@@ -30,6 +27,6 @@ public class PlayerSpawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        GetActiveControllers();
+    }
 }
