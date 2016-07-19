@@ -13,7 +13,7 @@ public class DashController : MonoBehaviour {
     //privates
     private bool _onCooldown;
     private bool _dashButtonDown;
-    public float _chargeTime;
+    private float _chargeTime;
 
     //variables we get from other components.
     private string _playerNumber;
