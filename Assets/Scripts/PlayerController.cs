@@ -46,12 +46,14 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement()
     {
+        float movementspeed = (Math.Abs(_moveHor) > Math.Abs(_moveVert)) ? Math.Abs(_moveHor) : Math.Abs(_moveVert);
+
         //add forward movement only when input is given. 
         if (_moveHor != 0 || _moveVert != 0) 
-            _rb.AddForce(_rb.transform.forward * Speed);
+            _rb.AddForce(_rb.transform.forward * movementspeed * Speed);
 
         //Modify animation speed
-        float movementspeed = (Math.Abs(_moveHor) > Math.Abs(_moveVert)) ? Math.Abs(_moveHor) : Math.Abs(_moveVert);
+
         Animator.SetFloat("Speed", movementspeed);
 
         //apply rotation
