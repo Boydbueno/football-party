@@ -5,9 +5,12 @@ using System.Runtime.InteropServices;
 public class PlayerController : MonoBehaviour
 {
     public float Speed;
+    public float RotationSpeed;
+
     public float DashStrength;
     public float DashToBallForce; // Doesn't work yet //TODO
     public float DashCooldown;
+
 
     private Rigidbody _rb;
 
@@ -41,9 +44,13 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        //apply the movement.
-        Vector3 movement = new Vector3(_moveHor, 0.0f, _moveVert);
-        _rb.AddForce(movement * Speed);
+        //add forward movement only when input is given. 
+        if (_moveHor != 0 || _moveVert != 0) 
+            _rb.AddForce(_rb.transform.forward * Speed);
+
+        //apply rotation
+        Vector3 targetRotation = new Vector3(_moveHor, 0.0f, _moveVert);
+        Rotate(targetRotation);
     }
 
     private void DashCheck()
@@ -51,7 +58,7 @@ public class PlayerController : MonoBehaviour
         if (_isDashing)
         {
             //Dash
-            _rb.AddForce(_rb.velocity * DashStrength);
+            _rb.AddForce(_rb.velocity*DashStrength);
 
             //start dash cooldown
             _dashOnCooldown = true;
@@ -59,6 +66,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Rotate(Vector3 targetRotation) 
+    {
+        Vector3 newRotation = Vector3.RotateTowards(_rb.transform.forward, targetRotation, RotationSpeed, 0.0f);
+        _rb.transform.rotation = Quaternion.LookRotation(newRotation);
+    }
+    
     //called after a the cooldown expires.
     private void ResetDashCoolDown()
     {
