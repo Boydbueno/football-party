@@ -8,10 +8,10 @@ public class GoalController : MonoBehaviour
     {
         Debug.Log(string.Format("Entered Goal: {0}", other.gameObject.tag));
         if(other.gameObject.tag == "Ball")
-            GoalScored();
+            GoalScored(other.gameObject);
     }
 
-    private void GoalScored()
+    private void GoalScored(GameObject ball)
     {
         Debug.Log("Goal Scored");
     }
