@@ -11,11 +11,19 @@ public class PlayerSpawn : MonoBehaviour
     public playingState p2_State = playingState.InActive;
     public playingState p3_State = playingState.InActive;
     public playingState p4_State = playingState.InActive;
+    public playingState p5_State = playingState.InActive;
+    public playingState p6_State = playingState.InActive;
+    public playingState p7_State = playingState.InActive;
+    public playingState p8_State = playingState.InActive;
 
     public float p1_inactivityTimer;
     public float p2_inactivityTimer;
     public float p3_inactivityTimer;
     public float p4_inactivityTimer;
+    public float p5_inactivityTimer;
+    public float p6_inactivityTimer;
+    public float p7_inactivityTimer;
+    public float p8_inactivityTimer;
 
     public Object playerObject;
     public int playerAmount;
@@ -120,5 +128,9 @@ public class PlayerSpawn : MonoBehaviour
         FiniteStateMachine(ref p2_State, ref p2_inactivityTimer, 2);
         FiniteStateMachine(ref p3_State, ref p3_inactivityTimer, 3);
         FiniteStateMachine(ref p4_State, ref p4_inactivityTimer, 4);
+        FiniteStateMachine(ref p5_State, ref p5_inactivityTimer, 5);
+        FiniteStateMachine(ref p6_State, ref p6_inactivityTimer, 6);
+        FiniteStateMachine(ref p7_State, ref p7_inactivityTimer, 7);
+        FiniteStateMachine(ref p8_State, ref p8_inactivityTimer, 8);
     }
 }
