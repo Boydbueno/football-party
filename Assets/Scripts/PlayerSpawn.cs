@@ -24,7 +24,7 @@ public class PlayerSpawn : MonoBehaviour {
     // Spawns a Player, with appropriate parameters
     void SpawnPlayer(int playerNumber)
     {
-        GameObject player = Instantiate(playerObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        GameObject player = Instantiate(playerObject, new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject;
         PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
         playerScript.Speed = 80;
         playerScript.RotationSpeed = 0.4f;

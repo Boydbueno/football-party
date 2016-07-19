@@ -35,8 +35,6 @@ public class PlayerController : MonoBehaviour
             _isDashing = Input.GetButtonDown("Dash"+ playerNumber) && !_dashOnCooldown;
             _moveHor = Input.GetAxis("Horizontal"+ playerNumber);
             _moveVert = Input.GetAxis("Vertical"+ playerNumber);
-        
-
     }
 
     #region FixedUpdate
