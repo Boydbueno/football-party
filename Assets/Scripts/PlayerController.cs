@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     public float DashToBallForce; // Doesn't work yet //TODO
     public float DashCooldown;
 
-
     private Rigidbody _rb;
 
     //dash variables
@@ -29,13 +28,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get input.
-        _isDashing = Input.GetKeyDown("space") && !_dashOnCooldown;
+        _isDashing = Input.GetButtonDown("Dash") && !_dashOnCooldown;
         _moveHor = Input.GetAxis("Horizontal");
         _moveVert = Input.GetAxis("Vertical");
     }
 
     #region FixedUpdate
-    // Update is called once per frame
     void FixedUpdate()
 	{
         ApplyMovement();
