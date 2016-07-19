@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private float _moveHor, _moveVert;
     private DashController _dash;
-
-	// Use this for initialization
+    
 	void Start()
 	{
 	    _rb = GetComponent<Rigidbody>();
@@ -52,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
         //add forward movement only when input is given.
         if (_moveHor != 0 || _moveVert != 0)
-            _rb.AddForce(_rb.transform.forward * Speed);
+            _rb.AddForce(_rb.transform.forward * movementSpeed * Speed);
     }
 
     //Rotate the player to the target.
