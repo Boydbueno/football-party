@@ -9,7 +9,6 @@ public class DashController : MonoBehaviour {
     public float DashChargeMaxTime; //After how many frames since we started charging the dash, do we achieve max dashing charge.
     public float Cooldown;
     
-
     //privates
     private bool _onCooldown;
     private bool _dashButtonDown;
@@ -51,7 +50,6 @@ public class DashController : MonoBehaviour {
     //updates charge timer
     private void UpdateChargeTime()
     {
-        
         _chargeTime += Time.deltaTime / DashChargeMaxTime;
         //clamp
         if (_chargeTime > 1)
@@ -62,6 +60,7 @@ public class DashController : MonoBehaviour {
     private void Dash()
     {
         float charge = Mathf.Lerp(ForceMin, ForceMax, _chargeTime);
+        Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
         ResetCharge();
         StartCooldown();
@@ -72,7 +71,6 @@ public class DashController : MonoBehaviour {
     {
         _chargeTime = 0;
     }
-
     #region Cooldown
 
     //starts the cooldown.
