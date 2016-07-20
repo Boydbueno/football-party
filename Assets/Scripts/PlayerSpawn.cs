@@ -30,8 +30,18 @@ public class PlayerSpawn : MonoBehaviour
     public float maxInactivitytime;
 
     List<GameObject> spawnedPlayers = new List<GameObject>();
-    // Use this for initialization
 
+    void Update() 
+    {
+        FiniteStateMachine(ref p1_State, ref p1_inactivityTimer, 1);
+        FiniteStateMachine(ref p2_State, ref p2_inactivityTimer, 2);
+        FiniteStateMachine(ref p3_State, ref p3_inactivityTimer, 3);
+        FiniteStateMachine(ref p4_State, ref p4_inactivityTimer, 4);
+        FiniteStateMachine(ref p5_State, ref p5_inactivityTimer, 5);
+        FiniteStateMachine(ref p6_State, ref p6_inactivityTimer, 6);
+        FiniteStateMachine(ref p7_State, ref p7_inactivityTimer, 7);
+        FiniteStateMachine(ref p8_State, ref p8_inactivityTimer, 8);
+    }
 
     // Spawns a Player, with appropriate playerNumber and adds it to the spawnedPlayers list
     void SpawnPlayer(int playerNumber)
@@ -118,19 +128,5 @@ public class PlayerSpawn : MonoBehaviour
                 }
             }
         }
-
-
-    }
-
-    void Update()
-    {
-        FiniteStateMachine(ref p1_State, ref p1_inactivityTimer, 1);
-        FiniteStateMachine(ref p2_State, ref p2_inactivityTimer, 2);
-        FiniteStateMachine(ref p3_State, ref p3_inactivityTimer, 3);
-        FiniteStateMachine(ref p4_State, ref p4_inactivityTimer, 4);
-        FiniteStateMachine(ref p5_State, ref p5_inactivityTimer, 5);
-        FiniteStateMachine(ref p6_State, ref p6_inactivityTimer, 6);
-        FiniteStateMachine(ref p7_State, ref p7_inactivityTimer, 7);
-        FiniteStateMachine(ref p8_State, ref p8_inactivityTimer, 8);
     }
 }

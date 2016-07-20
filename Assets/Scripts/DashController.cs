@@ -17,19 +17,30 @@ public class DashController : MonoBehaviour {
     //variables we get from other components.
     private string _playerNumber;
     private Rigidbody _rb;
+    private ParticleSystem _ps;
+
+    public float minEmmisionRate;
+    public float maxEmmisionRate;
+    public float minGravityForce;
+    public float maxGravityForce;
+    public float minPlaySpeed;
+    public float maxPlaySpeed;
 
     void Start()
     {
         _playerNumber = GetComponent<PlayerController>().PlayerNumber;
         _rb = GetComponent<Rigidbody>();
+        _ps = GetComponentInChildren<ParticleSystem>();
         ResetCharge();
+
     }
 	
 	void Update()
-	{
+	{   
         //get input.
 	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
+
 
     void FixedUpdate()
     {
@@ -37,7 +48,7 @@ public class DashController : MonoBehaviour {
         if (_onCooldown) return;
 
         if (_dashButtonDown)
-            UpdateChargeTime();
+            UpdateCharge();
         else //we pressed last check, and have now released.
             Dash();
     }
@@ -49,12 +60,25 @@ public class DashController : MonoBehaviour {
     }
 
     //updates charge timer
-    private void UpdateChargeTime()
+    private void UpdateCharge()
     {
         _chargeTime += Time.deltaTime / DashChargeMaxTime;
         //clamp
         if (_chargeTime > 1)
             _chargeTime = 1;
+
+        if (_ps.isPlaying)
+        {
+            _ps.gravityModifier = Mathf.Lerp(minGravityForce, maxGravityForce, _chargeTime);
+            _ps.emissionRate = Mathf.Lerp(minEmmisionRate, maxEmmisionRate, _chargeTime);
+            _ps.playbackSpeed = Mathf.Lerp(minPlaySpeed, maxPlaySpeed, _chargeTime);
+        }
+
+        else
+        {
+            ResetParticles();
+            _ps.Play();
+        }
     }
 
     //the actual dashing. 
@@ -64,6 +88,7 @@ public class DashController : MonoBehaviour {
         Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
         ResetCharge();
+        ResetParticles();
         StartCooldown();
     }
 
@@ -71,7 +96,17 @@ public class DashController : MonoBehaviour {
     private void ResetCharge()
     {
         _chargeTime = 0;
+       
     }
+
+    private void ResetParticles()
+    {
+        _ps.emissionRate = 0;
+        _ps.playbackSpeed = 10;
+    }
+    
+    
+
     #region Cooldown
 
     //starts the cooldown.
@@ -88,3 +123,4 @@ public class DashController : MonoBehaviour {
     }
     #endregion
 }
+
