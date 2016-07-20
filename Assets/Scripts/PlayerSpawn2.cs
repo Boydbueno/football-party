@@ -2,10 +2,18 @@
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
-public class PlayerSpawn : MonoBehaviour
-{
 
-    public enum playingState { InActive, Active, InBetween }
+public enum playingState { InActive, Active, InBetween }
+
+public struct PlayerData
+{
+    public PlayerController pc;
+    public playingState State;
+    public float InactivityTimer;
+}
+public class PlayerSpawn2 : MonoBehaviour
+{
+    public PlayerData[] players;
 
     public playingState p1_State = playingState.InActive;
     public playingState p2_State = playingState.InActive;
@@ -31,8 +39,19 @@ public class PlayerSpawn : MonoBehaviour
 
     List<GameObject> spawnedPlayers = new List<GameObject>();
 
+    void Start()
+    {
+        players = new PlayerData[playerAmount];
+    }
+
     void Update() 
     {
+
+        for(int i = 0; i < players.Length; i++)
+        {
+            PlayerData p = players[i];
+            FiniteStateMachine(ref p.State, ref p.InactivityTimer, i);
+        }
         //FSM of every player.
         FiniteStateMachine(ref p1_State, ref p1_inactivityTimer, 1);
         FiniteStateMachine(ref p2_State, ref p2_inactivityTimer, 2);
