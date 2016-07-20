@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     public float Speed;
     public float RotationSpeed;
-    public string playerNumber;
+    public int playerNumber;
     public bool DashChargeStopsMovement;
     public Animator Animator;
 
