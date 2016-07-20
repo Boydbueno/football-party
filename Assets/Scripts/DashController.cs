@@ -17,18 +17,33 @@ public class DashController : MonoBehaviour {
     //variables we get from other components.
     private string _playerNumber;
     private Rigidbody _rb;
+    private ParticleSystem _ps;
 
     void Start()
     {
         _playerNumber = GetComponent<PlayerController>().playerNumber;
         _rb = GetComponent<Rigidbody>();
+        _ps = GetComponentInChildren<ParticleSystem>();
+        _ps.Stop();
         ResetCharge();
+
     }
 	
 	void Update()
 	{
-	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
-	}
+        _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
+        if (_dashButtonDown && !_ps.isPlaying)
+        {
+            _ps.gameObject.SetActive(true);
+            _ps.Play();
+        }
+        if(!_dashButtonDown)
+        {
+            _ps.gameObject.SetActive(false);
+        }
+       
+       
+    }
 
     void FixedUpdate()
     {
