@@ -36,7 +36,7 @@ public class DashController : MonoBehaviour {
 
     void Start()
     {
-        _playerNumber = GetComponent<PlayerController>().playerNumber;
+        _playerNumber = GetComponent<PlayerController>().PlayerNumber;
         _rb = GetComponent<Rigidbody>();
         _ps = GetComponentInChildren<ParticleSystem>();
         _gameManager = GameManager.instance;
@@ -44,9 +44,11 @@ public class DashController : MonoBehaviour {
     }
 	
 	void Update()
-	{
-        _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
-    }
+	{   
+        //get input.
+	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
+	}
+
 
     void FixedUpdate()
     {

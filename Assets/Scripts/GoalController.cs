@@ -1,9 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class GoalController : MonoBehaviour
 {
+    public int TeamID;
+    public ScoreController Score;
+
     void OnTriggerEnter(Collider other)
     {
         Debug.Log(string.Format("Entered Goal: {0}", other.gameObject.tag));
@@ -16,7 +20,11 @@ public class GoalController : MonoBehaviour
 
     private void GoalScored(BallController ball)
     {
-        Debug.Log("Goal Scored");
-        ball.ResetPosition();
+        int scoringTeamID = ball.LastTeamTouchedID;
+        Debug.Log("Goal Scored bÿ: " + scoringTeamID);
+
+        if(scoringTeamID != TeamID)
+            Score.UpdateScore(scoringTeamID);
+        ball.Reset();
     }
 }
