@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
 {
     public float Speed;
     public float RotationSpeed;
-    public string playerNumber;
+    public int PlayerNumber;
+    public int TeamID;
     public bool DashChargeStopsMovement;
     public Animator Animator;
 
@@ -33,8 +34,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get input.
-        _moveHor = Input.GetAxis("Horizontal"+ playerNumber);
-        _moveVert = Input.GetAxis("Vertical"+ playerNumber);
+        _moveHor = Input.GetAxis("Horizontal"+ PlayerNumber);
+        _moveVert = Input.GetAxis("Vertical"+ PlayerNumber);
     }
 
     #region FixedUpdate

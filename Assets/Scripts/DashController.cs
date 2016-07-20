@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Xml.Schema;
+using XInputDotNetPure;
 
 public class DashController : MonoBehaviour {
 
@@ -14,8 +15,10 @@ public class DashController : MonoBehaviour {
     private bool _dashButtonDown;
     private float _chargeTime;
 
+    private GameManager _gameManager;
+
     //variables we get from other components.
-    private string _playerNumber;
+    private int _playerNumber;
     private Rigidbody _rb;
     private ParticleSystem _ps;
 
@@ -26,19 +29,26 @@ public class DashController : MonoBehaviour {
     public float minPlaySpeed;
     public float maxPlaySpeed;
 
+    public float minRumbleLeft;
+    public float maxRumbleLeft;
+    public float minRumbleRight;
+    public float maxRumbleRight;
+
     void Start()
     {
-        _playerNumber = GetComponent<PlayerController>().playerNumber;
+        _playerNumber = GetComponent<PlayerController>().PlayerNumber;
         _rb = GetComponent<Rigidbody>();
         _ps = GetComponentInChildren<ParticleSystem>();
+        _gameManager = GameManager.instance;
         ResetCharge();
-
     }
 	
 	void Update()
-	{
-        _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
-    }
+	{   
+        //get input.
+	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
+	}
+
 
     void FixedUpdate()
     {
@@ -65,13 +75,17 @@ public class DashController : MonoBehaviour {
         if (_chargeTime > 1)
             _chargeTime = 1;
 
+        // Lerp the rumble!
+        float rumbleForceLeft = Mathf.Lerp(minRumbleLeft, maxRumbleLeft, _chargeTime);
+        float rumbleForceRight = Mathf.Lerp(minRumbleRight, maxRumbleRight, _chargeTime);
+        _gameManager.RumbleStart((PlayerIndex)_playerNumber - 1, rumbleForceLeft, rumbleForceRight);
+
         if (_ps.isPlaying)
         {
             _ps.gravityModifier = Mathf.Lerp(minGravityForce, maxGravityForce, _chargeTime);
             _ps.emissionRate = Mathf.Lerp(minEmmisionRate, maxEmmisionRate, _chargeTime);
             _ps.playbackSpeed = Mathf.Lerp(minPlaySpeed, maxPlaySpeed, _chargeTime);
         }
-
         else
         {
             ResetParticles();
@@ -85,6 +99,8 @@ public class DashController : MonoBehaviour {
         float charge = Mathf.Lerp(ForceMin, ForceMax, _chargeTime);
         Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
+        _gameManager.RumbleStop((PlayerIndex)_playerNumber - 1);
+
         ResetCharge();
         ResetParticles();
         StartCooldown();
@@ -94,7 +110,6 @@ public class DashController : MonoBehaviour {
     private void ResetCharge()
     {
         _chargeTime = 0;
-       
     }
 
     private void ResetParticles()
@@ -103,10 +118,7 @@ public class DashController : MonoBehaviour {
         _ps.playbackSpeed = 10;
     }
     
-    
-
     #region Cooldown
-
     //starts the cooldown.
     private void StartCooldown()
     {
