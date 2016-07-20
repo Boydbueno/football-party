@@ -16,6 +16,7 @@ public class DashController : MonoBehaviour {
     private float _chargeTime;
 
     private GameManager _gameManager;
+    private AudioController _audioController;
 
     //variables we get from other components.
     private int _playerNumber;
@@ -40,6 +41,7 @@ public class DashController : MonoBehaviour {
         _rb = GetComponent<Rigidbody>();
         _ps = GetComponentInChildren<ParticleSystem>();
         _gameManager = GameManager.instance;
+        _audioController = GetComponent<AudioController>();
         ResetCharge();
     }
 	
@@ -48,7 +50,6 @@ public class DashController : MonoBehaviour {
         //get input.
 	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
-
 
     void FixedUpdate()
     {
@@ -96,11 +97,13 @@ public class DashController : MonoBehaviour {
     //the actual dashing. 
     private void Dash()
     {
+        if (_chargeTime == 0) return;
+
         float charge = Mathf.Lerp(ForceMin, ForceMax, _chargeTime);
         Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
         _gameManager.RumbleStop((PlayerIndex)_playerNumber - 1);
-
+        _audioController.Play("DashRelease");
         ResetCharge();
         ResetParticles();
         StartCooldown();
