@@ -5,6 +5,7 @@ using XInputDotNetPure;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
+    public float destroyDelay;
 
     void Awake() 
     {
@@ -13,6 +14,18 @@ public class GameManager : MonoBehaviour {
 
         if (this != instance) 
             Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Given a GameObject, spawns Smoke on the players position.
+    /// </summary>
+    public void Smoke(GameObject obj)
+    {
+        GameObject smokePrefab = (GameObject)Resources.Load("Smoke_PS");
+        GameObject smoke = Instantiate(smokePrefab);
+        smoke.transform.SetParent(obj.transform);
+        smoke.transform.localPosition = new Vector3(0, 0, 0);
+        Destroy(smoke, destroyDelay);
     }
 
     /// <summary>
