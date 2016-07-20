@@ -20,13 +20,14 @@ public class DashController : MonoBehaviour {
 
     void Start()
     {
-        _playerNumber = GetComponent<PlayerController>().playerNumber;
+        _playerNumber = GetComponent<PlayerController>().PlayerNumber;
         _rb = GetComponent<Rigidbody>();
         ResetCharge();
     }
 	
 	void Update()
 	{
+        //get input.
 	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
 

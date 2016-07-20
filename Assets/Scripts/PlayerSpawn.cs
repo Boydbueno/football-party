@@ -41,7 +41,7 @@ public class PlayerSpawn : MonoBehaviour
         for (int i = 0; i < spawnedPlayers.Count; i++)
         {
             PlayerController PLAYERscript = spawnedPlayers[i].GetComponent("PlayerController") as PlayerController;
-            if (int.Parse(PLAYERscript.playerNumber) == playerNumber)
+            if (int.Parse(PLAYERscript.PlayerNumber) == playerNumber)
             {
                 objectExists = true;
                 break;
@@ -52,7 +52,7 @@ public class PlayerSpawn : MonoBehaviour
         {
             GameObject player = Instantiate(playerObject, new Vector3(1, 0, 1), Quaternion.identity) as GameObject;
             PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
-            playerScript.playerNumber = playerNumber.ToString();
+            playerScript.PlayerNumber = playerNumber.ToString();
             spawnedPlayers.Add(player);
         }
         else
@@ -60,7 +60,7 @@ public class PlayerSpawn : MonoBehaviour
             foreach (GameObject player in spawnedPlayers)
             {
                 PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
-                if (playerScript.playerNumber == playerNumber.ToString())
+                if (playerScript.PlayerNumber == playerNumber.ToString())
                 {
                     player.SetActive(true);
                     break;
@@ -110,7 +110,7 @@ public class PlayerSpawn : MonoBehaviour
             foreach (GameObject player in spawnedPlayers)
             {
                 PlayerController playerScript = player.GetComponent("PlayerController") as PlayerController;
-                if (int.Parse(playerScript.playerNumber) == playerNumber)
+                if (int.Parse(playerScript.PlayerNumber) == playerNumber)
                 {
                     player.SetActive(false);
                     player_State = playingState.InActive;
