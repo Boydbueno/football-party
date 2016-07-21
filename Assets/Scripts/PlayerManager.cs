@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -90,6 +91,7 @@ public class PlayerManager : MonoBehaviour {
 
     private void deactivatePlayer(PlayerData playerData) {
         playerData.InactivityTimer = 0;
+        GameManager.instance.RumbleStop((PlayerIndex)playerData.PlayerID - 1);
         playerData.Player.SetActive(false);
     }
 
