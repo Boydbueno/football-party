@@ -35,18 +35,6 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Given a GameObject, spawns Explosion on the gameObjects position.
-    /// </summary>
-    /// <param name="position">The position to spawn the smoke</param>
-    public void Explode(Vector3 position)
-    {
-        GameObject explosionPrefab = (GameObject)Resources.Load("Explosion_PS");
-        GameObject explosion = Instantiate(explosionPrefab);
-        explosion.transform.position = position;
-        Destroy(explosion, destroyDelay);
-    }
-
-    /// <summary>
     /// Moves the Camera Magickly, using parametrized Perline Noise Waves
     /// </summary>
     public void ScreenShake()

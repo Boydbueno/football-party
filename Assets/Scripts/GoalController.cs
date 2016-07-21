@@ -11,7 +11,7 @@ public class GoalController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Debug.Log(string.Format("Entered Goal: {0}", other.gameObject.tag));
-        if (other.gameObject.tag == "Ball")
+        if (other.gameObject != null && other.gameObject.tag == "Ball" )
         {
             BallController ball = other.GetComponent<BallController>();
             GoalScored(ball);
@@ -23,8 +23,8 @@ public class GoalController : MonoBehaviour
         int scoringTeamID = ball.LastTeamTouchedID;
         Debug.Log("Goal Scored bÿ: " + scoringTeamID);
 
-        if(scoringTeamID != TeamID)
-            Score.UpdateScore(scoringTeamID);
+        //if(scoringTeamID != TeamID)
+            //Score.UpdateScore(scoringTeamID); TO FIX
         ball.Reset();
     }
 }
