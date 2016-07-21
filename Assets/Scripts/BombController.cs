@@ -11,6 +11,10 @@ public class BombController : MonoBehaviour {
 
     public bool BlinkOn = false;
 
+    public Renderer renderer;
+    public Material BlinkOnMaterial;
+    public Material BlinkOffMaterial;
+
     public float _detonationTime;
     private float _countDownDuration;
     private float _curBlinkInterval;
@@ -50,8 +54,15 @@ public class BombController : MonoBehaviour {
     void Blink()
     {
         //actual blink  
-        Debug.Log("Should blink(switch the mesh) now");
+
         BlinkOn = !BlinkOn;
+        if (BlinkOn) {
+            // Set one mesh
+            renderer.material = BlinkOnMaterial;
+        } else {
+            // Set other mesh
+            renderer.material = BlinkOffMaterial;
+        }
 
         float pointInCountdown = _detonationTime/_countDownDuration;
         //choose interval
