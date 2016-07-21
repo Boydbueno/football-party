@@ -16,13 +16,8 @@ public class BombController : MonoBehaviour {
     {
         _detonationTime -= Time.deltaTime;
 
-        // We have to make the object blink..
         StartCoroutine("Blinking");
-        // The blinking should have a default duration, so that it doesn't give away the point it explodes
 
-        // Max blinking speed
-
-        // When we reach zero, explode!
         if (_detonationTime <= 0) 
         {
             Explode();
@@ -43,10 +38,11 @@ public class BombController : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
-    public IEnumerator Blinking() {
+    public IEnumerator Blinking() 
+    {
         while (_detonationTime > 0) {
-            Mathf.Lerp()
-            yield return new WaitForSeconds();
+            //Mathf.Lerp(MinBlinkingSpeed, MaxBlinkingSpeed, )
+            yield return new WaitForSeconds(1);
         }
         yield return null;
     }

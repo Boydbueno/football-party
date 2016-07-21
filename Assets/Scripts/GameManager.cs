@@ -7,12 +7,30 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
     public float destroyDelay;
+    public float increment;
+
+    /**Variables for shakes**/
+    private GameObject cam;
+    public bool screenShakeOn;
+    private bool reShake;
+    public float shakx;
+    public float shaky;
+    public float shakz;
+    public bool shakeXOn;
+    public bool shakeYOn;
+    public bool shakeZOn;
+    private float _n = 0;
+    public float shakeXIntensifier = 1.0f;
+    public float shakeYIntensifier = 1.0f;
+    public float shakeZIntensifier = 1.0f;
 
     public GameObject Ball;
     public Object BombPrefab;
 
     void Awake() 
     {
+        cam = GameObject.FindGameObjectWithTag("MainCamera");
+
         if (instance == null) 
             instance = this;
 
@@ -25,8 +43,46 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ScreenShake()
     {
-        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        cam.transform.localPosition += new Vector3(1, 1, 1);
+        if (screenShakeOn)
+        {
+            if (reShake)
+            {
+                shakx = -shakx;
+                shaky = -shaky;
+                shakz = -shakz;
+                reShake = false;
+            }
+            else
+            {
+                shakx = shakeXIntensifier * Mathf.PerlinNoise(Time.time * _n, 0.0f);
+                shaky = shakeYIntensifier * Mathf.PerlinNoise(Time.time * _n + 1, 0.0f);
+                shakz = shakeZIntensifier * Mathf.PerlinNoise(Time.time * _n + 2, 0.0f);
+                reShake = true;
+            }
+
+            //Booleans shake to 0
+            if (!shakeXOn)
+            {
+                shakx = 0;
+            }
+            if (!shakeYOn)
+            {
+                shaky = 0;
+            }
+            if (!shakeZOn)
+            {
+                shakz = 0;
+            }
+
+            Vector3 camPos = cam.transform.localEulerAngles;
+            float camX = camPos.x;
+            float camY = camPos.y;
+            float camZ = camPos.z;
+            cam.transform.localEulerAngles = new Vector3(
+                camX + shakx,
+                camY + shaky,
+                camZ + shakz);
+        }
 
     }
 
@@ -35,6 +91,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown("space")) 
         {
             StartBombMode();
+        }
+
+        if (screenShakeOn)
+        {
+            _n += increment;
         }
     }
 
