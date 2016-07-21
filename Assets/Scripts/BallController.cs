@@ -8,7 +8,7 @@ public class BallController : MonoBehaviour
 
     private Rigidbody _rb;
     private Vector3 _startPos;
-	// Use this for initialization
+
 	void Start()
 	{
 	    _startPos = transform.position;

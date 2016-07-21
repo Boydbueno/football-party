@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System;
 
 [RequireComponent(typeof(AudioSource))]
-public class AudioController : MonoBehaviour {
+public class AudioController : MonoBehaviour 
+{
 
     public List<AudioSetting> AudioSettings = new List<AudioSetting>();
 
@@ -16,11 +17,13 @@ public class AudioController : MonoBehaviour {
         public AudioClip audioClip;
     }
 
-    public void Start() {
+    public void Start() 
+    {
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void Play(string key) {
+    public void Play(string key) 
+    {
         AudioClip audioClip = AudioSettings.Find(item => item.key == key).audioClip;
         _audioSource.clip = audioClip;
         _audioSource.Play();
