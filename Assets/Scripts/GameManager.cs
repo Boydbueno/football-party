@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour {
     public float shakeYIntensifier = 1.0f;
     public float shakeZIntensifier = 1.0f;
 
+    public GameObject Ball;
+    public Object BombPrefab;
+
     void Awake()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
@@ -88,6 +91,10 @@ public class GameManager : MonoBehaviour {
         {
             _n += increment;
         }
+
+        if (Input.GetKeyDown("space")) {
+            StartBombMode();
+        }
     }
 
     /// <summary>
@@ -143,4 +150,20 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(time);
         RumbleStop(playerIndex);
     }
+
+
+    public void StartBombMode() {
+        // Do the smoke effect
+        Smoke(Ball.transform.position);
+
+        // We deactivate the ball
+        Ball.SetActive(false);
+
+        // We instantiate the bomb
+        GameObject bomb = (GameObject)Instantiate(BombPrefab, Ball.transform.position, Quaternion.identity);
+
+        // We give the bomb an detonation time
+        bomb.GetComponent<BombController>().SetDetonationTime();
+    }
+
 }
