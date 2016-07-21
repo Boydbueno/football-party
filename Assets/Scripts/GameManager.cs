@@ -23,15 +23,28 @@ public class GameManager : MonoBehaviour {
     public float shakeYIntensifier = 1.0f;
     public float shakeZIntensifier = 1.0f;
 
-    void Awake() 
+    void Awake()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
 
-        if (instance == null) 
+        if (instance == null)
             instance = this;
 
-        if (this != instance) 
+        if (this != instance)
             Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Generates an explosion effect.
+    /// </summary>
+    public void Explode()
+    {
+        // Smoke 
+
+        // Fire in diferent directions
+
+        // Shader glow
+
     }
 
     /// <summary>
