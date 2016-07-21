@@ -46,6 +46,7 @@ public class DashController : MonoBehaviour {
         _tr.enabled = false;
         _gameManager = GameManager.instance;
         _audioController = GetComponent<AudioController>();
+
         ResetCharge();
     }
 	
@@ -90,6 +91,7 @@ public class DashController : MonoBehaviour {
 
         if (_ps.isPlaying)
         {
+            
             _ps.gravityModifier = Mathf.Lerp(minGravityForce, maxGravityForce, _chargeTime);
             _ps.emissionRate = Mathf.Lerp(minEmmisionRate, maxEmmisionRate, _chargeTime);
             _ps.playbackSpeed = Mathf.Lerp(minPlaySpeed, maxPlaySpeed, _chargeTime);
@@ -97,7 +99,8 @@ public class DashController : MonoBehaviour {
         }
         else
         {
-            ResetParticles();   
+            ResetParticles();
+         
             _ps.Play();
         }
     }
@@ -111,7 +114,8 @@ public class DashController : MonoBehaviour {
         Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
         _gameManager.RumbleStop((PlayerIndex)_playerNumber - 1);
-        //_audioController.Play("DashRelease");
+        int random = Random.Range(0,3);
+        _audioController.Play("Dash" + random);
         ResetCharge();
         ResetParticles();
         StartCooldown();
