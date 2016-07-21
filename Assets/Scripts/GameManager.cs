@@ -29,12 +29,12 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Given a GameObject, spawns Smoke on the players position.
     /// </summary>
-    public void Smoke(GameObject obj)
+    /// <param name="position">Position to spawn the smoke at</param>
+    public void Smoke(Vector3 position)
     {
         GameObject smokePrefab = (GameObject)Resources.Load("Smoke_PS");
         GameObject smoke = Instantiate(smokePrefab);
-        smoke.transform.SetParent(obj.transform);
-        smoke.transform.localPosition = new Vector3(0, 0, 0);
+        smoke.transform.position = position;
         Destroy(smoke, destroyDelay);
     }
 
