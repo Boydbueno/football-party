@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
 
     public List<PlayerData> PlayersData = new List<PlayerData>();
 
-    public Object PlayerPrefab;
+    public UnityEngine.Object PlayerPrefab;
     public float MaxInactivityTime;
 
     public int TeamsCount;
@@ -30,6 +31,11 @@ public class PlayerManager : MonoBehaviour {
     }
 
     void Update() {
+
+        if(Input.GetKeyDown("backspace")) {
+            ShuffleTeams();
+        }
+
         // We constantly listen for start inputs
         for (int i = 1; i <= maxPlayerCount; i++) {
             if (Input.GetButtonDown("Start" + i)) {
@@ -60,6 +66,27 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    public void ShuffleTeams() {
+        List<PlayerData> ActivePlayerList = PlayersData.FindAll(item => item.Player.activeSelf);
+        PlayersData.Clear();    
+        for (int i = 0; i < ActivePlayerList.Count; i++) {
+            PlayerData temp = ActivePlayerList[i];
+            int RandomIndex = Random.Range(0, ActivePlayerList.Count);
+            ActivePlayerList[i] = ActivePlayerList[RandomIndex];
+            ActivePlayerList[RandomIndex] = temp;
+        }
+
+        foreach(PlayerData data in ActivePlayerList) { 
+            int playerNumber = data.PlayerID;
+
+            //KILL. DIE.
+            Destroy(data.Player);
+            PlayersData.Remove(data);
+
+            createPlayer(playerNumber);
+        }
+    }
+
     private void createPlayer(int playerID) {
         // Create a new player with this id and give it an active state
         GameObject player = (GameObject)Instantiate(PlayerPrefab, new Vector3(1, 0, 1), Quaternion.identity);
@@ -78,7 +105,6 @@ public class PlayerManager : MonoBehaviour {
 
         Texture2D texture = GetTexture(playerID, teamID);
         SkinnedMeshRenderer renderer = player.GetComponentInChildren<SkinnedMeshRenderer>();
-        Debug.Log(renderer);
         renderer.material.mainTexture = texture;
 
         // And add it to the list
@@ -87,6 +113,7 @@ public class PlayerManager : MonoBehaviour {
 
     private void deactivatePlayer(PlayerData playerData) {
         playerData.InactivityTimer = 0;
+        GameManager.instance.RumbleStop((PlayerIndex)playerData.PlayerID - 1);
         playerData.Player.SetActive(false);
     }
 
@@ -105,7 +132,7 @@ public class PlayerManager : MonoBehaviour {
 
         for (int i = 0; i <= TeamsCount; i++) {
             List<PlayerData> playersData = PlayersData.FindAll(item => item.TeamID == i && item.Player.activeSelf);
-            if (playersData.Count <= smallestTeamSize) {
+            if (playersData.Count < smallestTeamSize) {
                 smallestTeamId = i;
                 smallestTeamSize = playersData.Count;
             }
@@ -116,7 +143,7 @@ public class PlayerManager : MonoBehaviour {
 
     private Texture2D GetTexture(int playerID, int teamID)
     {
-        string teamText = teamID == 1 ? "TeamRed" : "TeamBlue";
+        string teamText = teamID == 1 ? "TeamBlue" : "TeamRed";
         return _textures.FirstOrDefault(t => t.name.Contains(teamText) && t.name.Contains("Color_" + playerID));
     }
 }
