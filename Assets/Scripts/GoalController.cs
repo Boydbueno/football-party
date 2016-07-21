@@ -20,10 +20,9 @@ public class GoalController : MonoBehaviour
 
     private void GoalScored(BallController ball)
     {
-        int scoringTeamID = ball.LastTeamTouchedID;
-
-        if (scoringTeamID != TeamID)
-            Score.UpdateScore(scoringTeamID); 
+        //int scoringTeamID = ball.LastTeamTouchedID;
+        //Increases the Scores
+            Score.UpdateScore(1- TeamID); 
         ball.Reset();
     }
 }

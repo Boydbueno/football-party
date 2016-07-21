@@ -14,9 +14,6 @@ public class PlayerManager : MonoBehaviour {
 
     private Texture2D[] _textures;
 
-
-
-
     [System.Serializable]
     public class PlayerData {
         public GameObject Player;
@@ -104,9 +101,9 @@ public class PlayerManager : MonoBehaviour {
 
     private int GetSmallestTeamId() {
         int smallestTeamSize = 100;
-        int smallestTeamId = 1;
+        int smallestTeamId = 0;
 
-        for (int i = 1; i <= TeamsCount; i++) {
+        for (int i = 0; i <= TeamsCount; i++) {
             List<PlayerData> playersData = PlayersData.FindAll(item => item.TeamID == i && item.Player.activeSelf);
             if (playersData.Count <= smallestTeamSize) {
                 smallestTeamId = i;
@@ -119,7 +116,7 @@ public class PlayerManager : MonoBehaviour {
 
     private Texture2D GetTexture(int playerID, int teamID)
     {
-        string teamText = teamID == 0 ? "TeamBlue" : "TeamRed";
+        string teamText = teamID == 1 ? "TeamRed" : "TeamBlue";
         return _textures.FirstOrDefault(t => t.name.Contains(teamText) && t.name.Contains("Color_" + playerID));
     }
 }
