@@ -15,24 +15,6 @@ public class PlayerSpawn2 : MonoBehaviour
 {
     public PlayerData[] players;
 
-    public playingState p1_State = playingState.InActive;
-    public playingState p2_State = playingState.InActive;
-    public playingState p3_State = playingState.InActive;
-    public playingState p4_State = playingState.InActive;
-    public playingState p5_State = playingState.InActive;
-    public playingState p6_State = playingState.InActive;
-    public playingState p7_State = playingState.InActive;
-    public playingState p8_State = playingState.InActive;
-
-    public float p1_inactivityTimer;
-    public float p2_inactivityTimer;
-    public float p3_inactivityTimer;
-    public float p4_inactivityTimer;
-    public float p5_inactivityTimer;
-    public float p6_inactivityTimer;
-    public float p7_inactivityTimer;
-    public float p8_inactivityTimer;
-
     public Object playerObject;
     public int playerAmount;
     public float maxInactivitytime;
@@ -46,21 +28,12 @@ public class PlayerSpawn2 : MonoBehaviour
 
     void Update() 
     {
-
+        //FSM for every player.
         for(int i = 0; i < players.Length; i++)
         {
             PlayerData p = players[i];
             FiniteStateMachine(ref p.State, ref p.InactivityTimer, i);
         }
-        //FSM of every player.
-        FiniteStateMachine(ref p1_State, ref p1_inactivityTimer, 1);
-        FiniteStateMachine(ref p2_State, ref p2_inactivityTimer, 2);
-        FiniteStateMachine(ref p3_State, ref p3_inactivityTimer, 3);
-        FiniteStateMachine(ref p4_State, ref p4_inactivityTimer, 4);
-        FiniteStateMachine(ref p5_State, ref p5_inactivityTimer, 5);
-        FiniteStateMachine(ref p6_State, ref p6_inactivityTimer, 6);
-        FiniteStateMachine(ref p7_State, ref p7_inactivityTimer, 7);
-        FiniteStateMachine(ref p8_State, ref p8_inactivityTimer, 8);
     }
 
     // Spawns a Player, with appropriate playerNumber and adds it to the spawnedPlayers list
@@ -68,16 +41,7 @@ public class PlayerSpawn2 : MonoBehaviour
     {
 
         //check if a player already exists.
-        bool objectExists = false;
-        for (int i = 0; i < spawnedPlayers.Count; i++)
-        {
-            PlayerController PLAYERscript = spawnedPlayers[i].GetComponent("PlayerController") as PlayerController;
-            if (PLAYERscript.PlayerNumber == playerNumber)
-            {
-                objectExists = true;
-                break;
-            }
-        }
+        bool objectExists = spawnedPlayers.Select(t => t.GetComponent("PlayerController") as PlayerController).Any(playerScript => playerScript.PlayerNumber == playerNumber);
 
         //create the player if it doesn't exist yet.
         if (!objectExists)
