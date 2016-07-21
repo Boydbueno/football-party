@@ -17,6 +17,16 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Moves the Camera Magickly, using parametrized Perline Noise Waves
+    /// </summary>
+    public void ScreenShake()
+    {
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        cam.transform.localPosition += new Vector3(1, 1, 1);
+
+    }
+
+    /// <summary>
     /// Given a GameObject, spawns Smoke on the players position.
     /// </summary>
     public void Smoke(GameObject obj)

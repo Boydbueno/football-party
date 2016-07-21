@@ -22,6 +22,7 @@ public class DashController : MonoBehaviour {
     private int _playerNumber;
     private Rigidbody _rb;
     private ParticleSystem _ps;
+    private TrailRenderer _tr;
 
     public float minEmmisionRate;
     public float maxEmmisionRate;
@@ -40,15 +41,22 @@ public class DashController : MonoBehaviour {
         _playerNumber = GetComponent<PlayerController>().PlayerNumber;
         _rb = GetComponent<Rigidbody>();
         _ps = GetComponentInChildren<ParticleSystem>();
+        _ps.Stop();
+        _tr = GetComponent<TrailRenderer>();
+        _tr.enabled = false;
         _gameManager = GameManager.instance;
         _audioController = GetComponent<AudioController>();
         ResetCharge();
     }
 	
 	void Update()
-	{   
+	{
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            _gameManager.ScreenShake();
+        }
         //get input.
-	    _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
+        _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
 
     void FixedUpdate()
@@ -59,7 +67,10 @@ public class DashController : MonoBehaviour {
         if (_dashButtonDown)
             UpdateCharge();
         else //we pressed last check, and have now released.
+        {
+            _tr.enabled = false;
             Dash();
+        }
     }
 
     //returns true if the player is charging his dash.
@@ -86,10 +97,11 @@ public class DashController : MonoBehaviour {
             _ps.gravityModifier = Mathf.Lerp(minGravityForce, maxGravityForce, _chargeTime);
             _ps.emissionRate = Mathf.Lerp(minEmmisionRate, maxEmmisionRate, _chargeTime);
             _ps.playbackSpeed = Mathf.Lerp(minPlaySpeed, maxPlaySpeed, _chargeTime);
+
         }
         else
         {
-            ResetParticles();
+            ResetParticles();   
             _ps.Play();
         }
     }
@@ -103,7 +115,7 @@ public class DashController : MonoBehaviour {
         Vector3 chargeForce = _rb.transform.forward * charge;
         _rb.AddForce(_rb.transform.forward * charge);
         _gameManager.RumbleStop((PlayerIndex)_playerNumber - 1);
-        _audioController.Play("DashRelease");
+        //_audioController.Play("DashRelease");
         ResetCharge();
         ResetParticles();
         StartCooldown();
@@ -117,6 +129,7 @@ public class DashController : MonoBehaviour {
 
     private void ResetParticles()
     {
+        _tr.enabled = true;
         _ps.emissionRate = 0;
         _ps.playbackSpeed = 10;
     }
