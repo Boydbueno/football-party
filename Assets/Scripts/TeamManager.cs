@@ -6,7 +6,7 @@ using System.Globalization;
 
 public enum playingState { InActive, Active, InBetween }
 
-public struct PlayerData
+public class PlayerData
 {
     public GameObject Player
     {
