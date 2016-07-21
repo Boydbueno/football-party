@@ -2,10 +2,14 @@
 using System.Collections;
 using XInputDotNetPure;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour 
+{
 
     public static GameManager instance;
     public float destroyDelay;
+
+    public GameObject Ball;
+    public Object BombPrefab;
 
     void Awake() 
     {
@@ -24,6 +28,14 @@ public class GameManager : MonoBehaviour {
         GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.transform.localPosition += new Vector3(1, 1, 1);
 
+    }
+
+    public void Update() 
+    {
+        if (Input.GetKeyDown("space")) 
+        {
+            StartBombMode();
+        }
     }
 
     /// <summary>
@@ -78,5 +90,20 @@ public class GameManager : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         RumbleStop(playerIndex);
+    }
+
+    public void StartBombMode() 
+    {
+        // Do the smoke effect
+        Smoke(Ball.transform.position);
+
+        // We deactivate the ball
+        Ball.SetActive(false);
+
+        // We instantiate the bomb
+        GameObject bomb = (GameObject)Instantiate(BombPrefab, Ball.transform.position, Quaternion.identity);
+
+        // We give the bomb an detonation time
+        bomb.GetComponent<BombController>().SetDetonationTime();
     }
 }
