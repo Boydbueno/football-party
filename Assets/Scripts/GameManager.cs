@@ -35,19 +35,6 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Generates an explosion effect.
-    /// </summary>
-    public void Explode()
-    {
-        // Smoke 
-
-        // Fire in diferent directions
-
-        // Shader glow
-
-    }
-
-    /// <summary>
     /// Moves the Camera Magickly, using parametrized Perline Noise Waves
     /// </summary>
     public void ScreenShake()

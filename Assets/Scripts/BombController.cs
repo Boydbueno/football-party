@@ -8,16 +8,23 @@ public class BombController : MonoBehaviour {
 
     public float MaxBlinkingInterval;
     public float MinBlinkingInterval;
-    public float TimeTillMaxBlinkingSpeed;
+
+    public bool BlinkOn = false;
 
     public float _detonationTime;
+    private float _countDownDuration;
+    private float _curBlinkInterval;
+
+    void Start()
+    {
+        SetDetonationTime();
+        Blink();
+    }
 
     void Update() 
     {
         _detonationTime -= Time.deltaTime;
-
-        // Todo: Start Blinking!
-
+        
         if (_detonationTime <= 0) 
         {
             Explode();
@@ -27,6 +34,7 @@ public class BombController : MonoBehaviour {
     public void SetDetonationTime() 
     {
         _detonationTime = Random.Range(MinDetonationTime, MaxdetonationTime);
+        _countDownDuration = _detonationTime;
     }
 
     public void Explode() 
@@ -37,5 +45,18 @@ public class BombController : MonoBehaviour {
         Destroy(this.gameObject);
 
         // Put back the normal ball or start new game mode, whatever
+    }
+
+    void Blink()
+    {
+        //actual blink  
+        Debug.Log("Should blink(switch the mesh) now");
+        BlinkOn = !BlinkOn;
+
+        float pointInCountdown = _detonationTime/_countDownDuration;
+        //choose interval
+        float interval = Mathf.Lerp(MinBlinkingInterval, MaxBlinkingInterval, pointInCountdown);
+        //invoke next blink
+        Invoke("Blink", interval);
     }
 }

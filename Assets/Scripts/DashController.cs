@@ -50,7 +50,7 @@ public class DashController : MonoBehaviour {
     }
 	
 	void Update()
-	{      
+	{
         //get input.
         _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
