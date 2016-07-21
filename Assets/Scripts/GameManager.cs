@@ -35,16 +35,15 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Generates an explosion effect.
+    /// Given a GameObject, spawns Explosion on the gameObjects position.
     /// </summary>
-    public void Explode()
+    /// <param name="position">The position to spawn the smoke</param>
+    public void Explode(Vector3 position)
     {
-        // Smoke 
-
-        // Fire in diferent directions
-
-        // Shader glow
-
+        GameObject explosionPrefab = (GameObject)Resources.Load("Explosion_PS");
+        GameObject explosion = Instantiate(explosionPrefab);
+        explosion.transform.position = position;
+        Destroy(explosion, destroyDelay);
     }
 
     /// <summary>
