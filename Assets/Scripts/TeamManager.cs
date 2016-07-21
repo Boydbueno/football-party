@@ -43,7 +43,7 @@ public class TeamManager : MonoBehaviour
     public float MaxInactivitySeconds;
 
     private List<PlayerData> _activePlayers;
-    private int[] _teamSizes;
+    public int[] _teamSizes;
 
     void Start()
     {

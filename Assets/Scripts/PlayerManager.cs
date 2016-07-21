@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -11,6 +12,11 @@ public class PlayerManager : MonoBehaviour {
 
     public int TeamsCount;
 
+    private Texture2D[] _textures;
+
+
+
+
     [System.Serializable]
     public class PlayerData {
         public GameObject Player;
@@ -20,6 +26,11 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public int maxPlayerCount;
+
+    void Start()
+    {
+        _textures = Resources.LoadAll<Texture2D>("Textures");
+    }
 
     void Update() {
         // We constantly listen for start inputs
@@ -57,11 +68,18 @@ public class PlayerManager : MonoBehaviour {
         GameObject player = (GameObject)Instantiate(PlayerPrefab, new Vector3(1, 0, 1), Quaternion.identity);
         player.GetComponent<PlayerController>().PlayerNumber = playerID;
 
+        int team = GetSmallestTeamId();
+
         PlayerData playerData = new PlayerData {
             Player = player,
             PlayerID = playerID,
-            TeamID = GetSmallestTeamId()
+            TeamID = team
         };
+
+        Texture2D texture = GetTexture(playerID, team);
+        SkinnedMeshRenderer renderer = player.GetComponentInChildren<SkinnedMeshRenderer>();
+        Debug.Log(renderer);
+        renderer.material.mainTexture = texture;
 
         // And add it to the list
         PlayersData.Add(playerData);
@@ -94,5 +112,11 @@ public class PlayerManager : MonoBehaviour {
         }
 
         return smallestTeamId;
+    }
+
+    private Texture2D GetTexture(int playerID, int teamID)
+    {
+        string teamText = teamID == 0 ? "TeamBlue" : "TeamRed";
+        return _textures.FirstOrDefault(t => t.name.Contains(teamText) && t.name.Contains("Color_" + playerID));
     }
 }
