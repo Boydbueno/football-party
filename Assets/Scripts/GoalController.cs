@@ -21,10 +21,9 @@ public class GoalController : MonoBehaviour
     private void GoalScored(BallController ball)
     {
         int scoringTeamID = ball.LastTeamTouchedID;
-        Debug.Log("Goal Scored bÿ: " + scoringTeamID);
 
-        //if(scoringTeamID != TeamID)
-            //Score.UpdateScore(scoringTeamID); TO FIX
+        if (scoringTeamID != TeamID)
+            Score.UpdateScore(scoringTeamID); 
         ball.Reset();
     }
 }
