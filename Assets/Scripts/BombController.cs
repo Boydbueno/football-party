@@ -49,7 +49,7 @@ public class BombController : MonoBehaviour {
 
     void Blink()
     {
-        //actual blink
+        //actual blink  
         Debug.Log("Should blink(switch the mesh) now");
         BlinkOn = !BlinkOn;
 
