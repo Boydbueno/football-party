@@ -2,8 +2,7 @@
 using System.Collections;
 using XInputDotNetPure;
 
-public class GameManager : MonoBehaviour 
-{
+public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
     public float destroyDelay;
@@ -24,18 +23,28 @@ public class GameManager : MonoBehaviour
     public float shakeYIntensifier = 1.0f;
     public float shakeZIntensifier = 1.0f;
 
-    public GameObject Ball;
-    public Object BombPrefab;
-
-    void Awake() 
+    void Awake()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
 
-        if (instance == null) 
+        if (instance == null)
             instance = this;
 
-        if (this != instance) 
+        if (this != instance)
             Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Generates an explosion effect.
+    /// </summary>
+    public void Explode()
+    {
+        // Smoke 
+
+        // Fire in diferent directions
+
+        // Shader glow
+
     }
 
     /// <summary>
@@ -43,7 +52,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ScreenShake()
     {
-        if (screenShakeOn)
+        if(screenShakeOn)
         {
             if (reShake)
             {
@@ -86,13 +95,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void Update() 
+    void Update()
     {
-        if (Input.GetKeyDown("space")) 
-        {
-            StartBombMode();
-        }
-
         if (screenShakeOn)
         {
             _n += increment;
@@ -102,7 +106,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Given a GameObject, spawns Smoke on the players position.
     /// </summary>
-    /// <param name="position">Position to spawn the smoke at</param>
+    /// <param name="position">The position to spawn the smoke</param>
     public void Smoke(Vector3 position)
     {
         GameObject smokePrefab = (GameObject)Resources.Load("Smoke_PS");
@@ -151,20 +155,5 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         RumbleStop(playerIndex);
-    }
-
-    public void StartBombMode() 
-    {
-        // Do the smoke effect
-        Smoke(Ball.transform.position);
-
-        // We deactivate the ball
-        Ball.SetActive(false);
-
-        // We instantiate the bomb
-        GameObject bomb = (GameObject)Instantiate(BombPrefab, Ball.transform.position, Quaternion.identity);
-
-        // We give the bomb an detonation time
-        bomb.GetComponent<BombController>().SetDetonationTime();
     }
 }
