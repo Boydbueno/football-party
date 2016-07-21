@@ -6,7 +6,7 @@ using System.Globalization;
 
 public enum playingState { InActive, Active, InBetween }
 
-public struct PlayerData
+public class PlayerData
 {
     public GameObject Player
     {
@@ -43,7 +43,7 @@ public class TeamManager : MonoBehaviour
     public float MaxInactivitySeconds;
 
     private List<PlayerData> _activePlayers;
-    private int[] _teamSizes;
+    public int[] _teamSizes;
 
     void Start()
     {

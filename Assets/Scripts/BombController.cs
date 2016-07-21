@@ -35,12 +35,14 @@ public class BombController : MonoBehaviour {
         }
     }
 
+    //set the detonation time.
     public void SetDetonationTime() 
     {
         _detonationTime = Random.Range(MinDetonationTime, MaxdetonationTime);
         _countDownDuration = _detonationTime;
     }
 
+    //bomb goes boooooom!
     public void Explode() 
     {
         // Todo: Spawn explosion
