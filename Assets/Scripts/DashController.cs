@@ -50,10 +50,7 @@ public class DashController : MonoBehaviour {
     }
 	
 	void Update()
-	{
-      
-         _gameManager.ScreenShake();
-        
+	{      
         //get input.
         _dashButtonDown = Input.GetButton("Dash" + _playerNumber);
 	}
