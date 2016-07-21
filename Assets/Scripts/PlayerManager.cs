@@ -67,16 +67,19 @@ public class PlayerManager : MonoBehaviour {
         // Create a new player with this id and give it an active state
         GameObject player = (GameObject)Instantiate(PlayerPrefab, new Vector3(1, 0, 1), Quaternion.identity);
         player.GetComponent<PlayerController>().PlayerNumber = playerID;
+        
 
-        int team = GetSmallestTeamId();
+        int teamID = GetSmallestTeamId();
 
         PlayerData playerData = new PlayerData {
             Player = player,
             PlayerID = playerID,
-            TeamID = team
+            TeamID = teamID
         };
 
-        Texture2D texture = GetTexture(playerID, team);
+        player.GetComponent<PlayerController>().TeamID = teamID;
+
+        Texture2D texture = GetTexture(playerID, teamID);
         SkinnedMeshRenderer renderer = player.GetComponentInChildren<SkinnedMeshRenderer>();
         Debug.Log(renderer);
         renderer.material.mainTexture = texture;
