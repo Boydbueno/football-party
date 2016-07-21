@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
     public float destroyDelay;
+    public float increment;
+    public bool screenShakeOn;
+    private float _n = 0;
 
     void Awake() 
     {
@@ -21,9 +24,21 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void ScreenShake()
     {
+        if(screenShakeOn)
+        {
         GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
-        cam.transform.localPosition += new Vector3(1, 1, 1);
+            cam.transform.localPosition = new Vector3(cam.transform.localPosition.x, Mathf.PerlinNoise(Time.time * _n, 0.0f)
+            , cam.transform.localPosition.z);
+        }
 
+    }
+
+    void Update()
+    {
+        if (screenShakeOn)
+        {
+            _n += increment;
+        }
     }
 
     /// <summary>
