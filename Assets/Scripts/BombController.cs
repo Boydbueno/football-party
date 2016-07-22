@@ -65,7 +65,6 @@ public class BombController : MonoBehaviour
             }
             if (switchTime > 1)
             {
-
                 switchTime = 0;
                 toShake = false;
                 bombExploding = false;
@@ -112,7 +111,6 @@ public class BombController : MonoBehaviour
 
         toShake = true;
         _hasExploded = true;
-      
     }
 
     void Blink()
@@ -120,10 +118,12 @@ public class BombController : MonoBehaviour
         //actual blink  
         BlinkOn = !BlinkOn;
         if (BlinkOn) {
+            _ac.Play("Tick");
             // Set one mesh
             renderer.material = BlinkOnMaterial;
             RadiusSphere.SetActive(false);
         } else {
+            _ac.Play("Tock");
             // Set other mesh
             renderer.material = BlinkOffMaterial;
             RadiusSphere.SetActive(true);
