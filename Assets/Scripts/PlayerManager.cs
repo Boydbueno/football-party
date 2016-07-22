@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ public class PlayerManager : MonoBehaviour {
 
     public static PlayerManager instance;
     public List<PlayerData> PlayersData = new List<PlayerData>();
+    public IconController _shuffleIcon;
 
     public UnityEngine.Object PlayerPrefab;
     public float MaxInactivityTime;
@@ -90,7 +92,8 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void ShuffleTeams() {
-
+            
+        _shuffleIcon.Show();
         //shuffle the list to a random order.
         List<PlayerData> ActivePlayerList = PlayersData.FindAll(item => item.Player.activeSelf);
         PlayersData.Clear();    

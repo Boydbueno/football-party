@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using XInputDotNetPure;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -191,9 +192,9 @@ public class GameManager : MonoBehaviour {
 
     private void StartNormalMode()
     {
-        SpawnBall();
         UpdateScoreAfterBomb();
         _playerManager.ShuffleTeams();
+        SpawnBall();
     }
 
     //updates the score
