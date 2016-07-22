@@ -33,7 +33,7 @@ public class BallController : MonoBehaviour
         //reset the position and movement.
         transform.position = _startPos;
         _rb.velocity = Vector3.zero;
-        _rb.rotation = Quaternion.identity;
+        _rb.angularVelocity = Vector3.zero;
 
         ResetLTT();
         GameManager.instance.Smoke(_startPos);
