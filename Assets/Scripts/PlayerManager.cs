@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
@@ -25,6 +26,12 @@ public class PlayerManager : MonoBehaviour {
         public int TeamID;
     }
 
+    public class PlayerCreationData
+    {
+        public int playerID;
+        public Vector3 Position = Vector3.zero;
+    }
+
     public int maxPlayerCount;
 
     void Start()
@@ -45,7 +52,10 @@ public class PlayerManager : MonoBehaviour {
                 PlayerData playerData = PlayersData.Find(item => item.PlayerID == i);
 
                 if (playerData == null) {
-                    createPlayer(i);
+                    {
+                        PlayerCreationData data = new PlayerCreationData {playerID = i};
+                        createPlayer(data);
+                    }
                 } else if (!playerData.Player.activeSelf) {
                     activatePlayer(playerData);
                 }                
@@ -69,6 +79,8 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void ShuffleTeams() {
+
+        //shuffle the list to a random order.
         List<PlayerData> ActivePlayerList = PlayersData.FindAll(item => item.Player.activeSelf);
         PlayersData.Clear();    
         for (int i = 0; i < ActivePlayerList.Count; i++) {
@@ -78,22 +90,33 @@ public class PlayerManager : MonoBehaviour {
             ActivePlayerList[RandomIndex] = temp;
         }
 
+        //loop through the list, destroying the players and creating the anew.
         foreach(PlayerData data in ActivePlayerList) { 
+            //save reusable data.
             int playerNumber = data.PlayerID;
-
+            Vector3 position = data.Player.transform.position;
             //KILL. DIE.
             Destroy(data.Player);
             PlayersData.Remove(data);
-
-            createPlayer(playerNumber);
+            //create a new player.
+            PlayerCreationData createData = new PlayerCreationData {playerID = playerNumber, Position = position};
+            createPlayer(createData);
         }
     }
 
-    private void createPlayer(int playerID)
+    private void createPlayer(PlayerCreationData data)
     {
+        int playerID = data.playerID;
         int teamID = GetSmallestTeamId();
 
-        Vector3 position = GetTeamPosition(teamID);
+        //get position
+        Vector3 position;
+        if (data.Position != Vector3.zero) //default value, if we haven't assigned a custom value.
+            position = data.Position;
+        else
+            position = GetTeamPosition(teamID);
+        
+
         // Create a new player with this id and give it an active state
         GameObject player = (GameObject)Instantiate(PlayerPrefab, position, Quaternion.identity);
         player.GetComponent<PlayerController>().PlayerNumber = playerID;
