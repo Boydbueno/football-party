@@ -72,13 +72,11 @@ public class BombController : MonoBehaviour
         }
 
         // Put back the normal ball
-        GameManager.instance.SpawnBall();
+        GameManager.instance.StartNormalMode();
 
         _hasExploded = true;
         //detroy the bomb.
         Destroy(this.gameObject);
-
-
     }
 
     void Blink()

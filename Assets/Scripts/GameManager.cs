@@ -26,8 +26,11 @@ public class GameManager : MonoBehaviour {
     public GameObject Ball;
     public Object BombPrefab;
 
+    private PlayerManager _playerManager;
+
     void Awake()
     {
+        _playerManager = GetComponentInChildren<PlayerManager>();
         cam = GameObject.FindGameObjectWithTag("MainCamera");
 
         if (instance == null)
@@ -166,7 +169,13 @@ public class GameManager : MonoBehaviour {
         bomb.GetComponent<BombController>().SetDetonationTime();
     }
 
-    public void SpawnBall()
+    public void StartNormalMode()
+    {
+        SpawnBall();
+        _playerManager.ShuffleTeams();
+    }
+
+    private void SpawnBall()
     {
         Ball.SetActive(true);
 

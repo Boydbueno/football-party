@@ -7,14 +7,17 @@ public class PlayerController : MonoBehaviour
 {
     public float Speed;
     public float RotationSpeed;
+    public float RespawnTime;
     public int PlayerNumber;
     public int TeamID;
     public bool DashChargeStopsMovement;
+    public bool IsDead;
     public Animator Animator;
 
     private Rigidbody _rb;
-    private float _moveHor, _moveVert;
     private DashController _dash;
+    private Vector3 _startPosition;
+    private float _moveHor, _moveVert;
 
     void OnCollisionEnter(Collision collision) 
     {
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
 	{
 	    _rb = GetComponent<Rigidbody>();
 	    _dash = GetComponent<DashController>();
+	    _startPosition = transform.position;
 	}
 
     void Update()
@@ -69,4 +73,19 @@ public class PlayerController : MonoBehaviour
         _rb.transform.rotation = Quaternion.LookRotation(newRotation);
     }
     #endregion
+
+    public void Die()
+    {
+        IsDead = true;
+        //spawn smoke
+        GameManager.instance.Smoke(transform.position);
+        //"remove" player.
+        transform.position = new Vector3(1000,-1000,1000);
+    }
+
+    public void Resurrect()
+    {
+        if (IsDead)
+            transform.position = _startPosition;
+    }
 }
