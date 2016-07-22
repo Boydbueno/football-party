@@ -130,9 +130,9 @@ public class PlayerManager : MonoBehaviour {
         int smallestTeamSize = 100;
         int smallestTeamId = 0;
 
-        for (int i = 0; i <= TeamsCount; i++) {
+        for (int i = 1; i <= TeamsCount; i++) {
             List<PlayerData> playersData = PlayersData.FindAll(item => item.TeamID == i && item.Player.activeSelf);
-            if (playersData.Count < smallestTeamSize) {
+            if (playersData.Count <= smallestTeamSize) {
                 smallestTeamId = i;
                 smallestTeamSize = playersData.Count;
             }
