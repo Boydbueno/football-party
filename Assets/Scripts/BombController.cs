@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-public class BombController : MonoBehaviour {
+public class BombController : MonoBehaviour
+{
+
+    public float LethalExplosionRange;
+    public float ExplosionForce;
 
     public float MinDetonationTime;
     public float MaxdetonationTime;
@@ -9,7 +15,7 @@ public class BombController : MonoBehaviour {
     public float MaxBlinkingInterval;
     public float MinBlinkingInterval;
 
-    public bool BlinkOn = false;
+    public bool BlinkOn;
 
     public Renderer renderer;
     public Material BlinkOnMaterial;
@@ -18,6 +24,7 @@ public class BombController : MonoBehaviour {
     public float _detonationTime;
     private float _countDownDuration;
     private float _curBlinkInterval;
+    
 
     void Start()
     {
@@ -45,12 +52,26 @@ public class BombController : MonoBehaviour {
     //bomb goes boooooom!
     public void Explode() 
     {
-        // Todo: Spawn explosion
+        //spawn a sweet smoke explosion.
         GameManager.instance.Smoke(transform.position);
-        
+
+        // apply ExplosionForce to all players in range.
+        List<PlayerManager.PlayerData> players = GameManager.instance.GetComponentInChildren<PlayerManager>().PlayersData;
+        foreach (GameObject player in players.Select(t => t.Player))
+        {
+            RaycastHit hit;
+            Physics.Linecast(transform.position, player.transform.position, out hit);
+            if (hit.collider == player.GetComponent<Collider>())
+            {
+                player.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, LethalExplosionRange);
+            }
+        }
+
+        //detroy the bomb.
         Destroy(this.gameObject);
 
-        // Put back the normal ball or start new game mode, whatever
+        // Put back the normal ball
+        GameManager.instance.SpawnBall();
     }
 
     void Blink()
