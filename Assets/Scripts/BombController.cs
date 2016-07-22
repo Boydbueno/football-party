@@ -5,6 +5,7 @@ using System.Linq;
 
 public class BombController : MonoBehaviour
 {
+    AudioController _ac;
 
     public float LethalExplosionRange;
     public float ExplosionForce;
@@ -31,6 +32,7 @@ public class BombController : MonoBehaviour
 
     void Start()
     {
+        _ac = GetComponent<AudioController>();
         SetDetonationTime();
         Blink();
     }
@@ -38,7 +40,6 @@ public class BombController : MonoBehaviour
     void Update() 
     {
         _detonationTime -= Time.deltaTime;
-        
         if (_detonationTime <= 0 && !_hasExploded) 
         {
             Explode();
@@ -55,8 +56,10 @@ public class BombController : MonoBehaviour
     //bomb goes boooooom!
     public void Explode() 
     {
+
         //spawn a sweet smoke explosion.
-        GameManager.instance.Smoke(transform.position);
+        GameManager.instance.Explode(transform.position);
+        _ac.Play("BOOM");
 
         // apply ExplosionForce to all players in range.
         List<PlayerManager.PlayerData> players = GameManager.instance.GetComponentInChildren<PlayerManager>().PlayersData;
@@ -76,13 +79,12 @@ public class BombController : MonoBehaviour
 
         _hasExploded = true;
         //detroy the bomb.
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, 3f);
     }
 
     void Blink()
     {
         //actual blink  
-
         BlinkOn = !BlinkOn;
         if (BlinkOn) {
             // Set one mesh
