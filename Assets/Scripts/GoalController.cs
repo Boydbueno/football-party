@@ -19,6 +19,7 @@ public class GoalController : MonoBehaviour
 
     private void GoalScored(BallController ball)
     {
+        Debug.Log(TeamID);
         //Increases the Scores
         Score.UpdateScore(1- TeamID);
         //reset the ball.

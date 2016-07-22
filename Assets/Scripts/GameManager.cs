@@ -208,8 +208,8 @@ public class GameManager : MonoBehaviour {
             else
                 redDead++;
         }
-        score.UpdateScore(1, blueDead);
-        score.UpdateScore(2, redDead);
+        score.UpdateScore(0, blueDead);
+        score.UpdateScore(1, redDead);
     }
 
     private void SpawnBall()

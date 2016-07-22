@@ -28,7 +28,7 @@ public class ScoreController : MonoBehaviour
             Debug.Log("No player touched the ball leading up to this goal.");
             return;
         }
-        _scores[teamNumber-1] += increment;
+        _scores[teamNumber] += increment;
         UpdateScoreText();
     }
 

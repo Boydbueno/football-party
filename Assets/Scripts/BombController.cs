@@ -20,6 +20,7 @@ public class BombController : MonoBehaviour
     public float MinBlinkingInterval;
 
     public bool BlinkOn;
+    private bool bombExploding;
 
     public Renderer renderer;
     public GameObject RadiusSphere;
@@ -55,15 +56,20 @@ public class BombController : MonoBehaviour
         {
             switchTime += Time.deltaTime;
             GameManager.instance.ScreenShake();
-            
+
             Explode();
+            if (!bombExploding)
+            {
+                bombExploding = true;
+                _ac.Play("BOOM");
+            }
             if (switchTime > 1)
             {
 
                 switchTime = 0;
                 toShake = false;
+                bombExploding = false;
                 //detroy the bomb.
-                _ac.Play("BOOM");
                 Destroy(this.gameObject, 2f);
             }
         }
