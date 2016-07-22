@@ -8,19 +8,19 @@ public class CanvasTime : MonoBehaviour {
     public Text timeText;
     private float second;
     public float secondDuration;
+
+    public int modeSwithTime;
 	// Use this for initialization
 	void Start ()
     {
-	
-	}
+        modeSwithTime = Random.Range(90, 180);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
-
         second += Time.deltaTime;
-        if(second >= secondDuration)
+        if (second >= secondDuration)
         {
             //After second has passed update timeText by 1 second
             string[] curTime = timeText.text.Split(':');
@@ -28,13 +28,13 @@ public class CanvasTime : MonoBehaviour {
             string sec = curTime[1];
             int newTime = int.Parse(sec) + 1;
             string NewTime = newTime.ToString();
+            int minutes = int.Parse(min) + 1;
 
             //Handles minutes
             if (newTime >= 59)
             {
-                int minutes = int.Parse(min) + 1;
                 string extra = "";
-                if(minutes < 10)
+                if (minutes < 10)
                 {
                     extra = "0";
                 }
@@ -47,13 +47,19 @@ public class CanvasTime : MonoBehaviour {
             {
                 NewTime = '0' + newTime.ToString();
             }
-          
+
             timeText.text = min + ':' + NewTime;
 
             //Reset second, for next second
             second = 0;
-        }
-       
 
+            //Switches Modes
+            int time = newTime + minutes;
+            if(time >= modeSwithTime)
+            {
+                modeSwithTime = Random.Range(90, 180);
+                PlayerManager.instance.ShuffleTeams();
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
 
+    public static PlayerManager instance;
     public List<PlayerData> PlayersData = new List<PlayerData>();
 
     public UnityEngine.Object PlayerPrefab;
@@ -33,6 +34,16 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public int maxPlayerCount;
+
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+
+        if (this != instance)
+            Destroy(gameObject);
+    }
 
     void Start()
     {
