@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using XInputDotNetPure;
 
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
+    public ScoreController score;
     public float destroyDelay;
     public float increment;
+
+    public float BetweenModeTime = 2;
 
     /**Variables for shakes**/
     private GameObject cam;
@@ -180,10 +184,32 @@ public class GameManager : MonoBehaviour {
         bomb.GetComponent<BombController>().SetDetonationTime();
     }
 
-    public void StartNormalMode()
+    public void GoToNormalMode()
+    {
+        Invoke("StartNormalMode", BetweenModeTime);
+    }
+
+    private void StartNormalMode()
     {
         SpawnBall();
+        UpdateScoreAfterBomb();
         _playerManager.ShuffleTeams();
+    }
+
+    //updates the score
+    private void UpdateScoreAfterBomb()
+    {
+        int blueDead = 0, redDead = 0;
+        List<PlayerManager.PlayerData> deadPlayers = _playerManager.PlayersData.FindAll(p => p.Player.GetComponent<PlayerController>().IsDead);
+        foreach (PlayerManager.PlayerData p in deadPlayers)
+        {
+            if (p.TeamID == 1)
+                blueDead++;
+            else
+                redDead++;
+        }
+        score.UpdateScore(1, blueDead);
+        score.UpdateScore(2, redDead);
     }
 
     private void SpawnBall()
