@@ -13,6 +13,8 @@ public class PlayerManager : MonoBehaviour {
 
     public int TeamsCount;
 
+    public Vector3 BlueTeamSpawn, RedTeamSpawn;
+
     private Texture2D[] _textures;
 
     [System.Serializable]
@@ -87,14 +89,16 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
-    private void createPlayer(int playerID) {
-        // Create a new player with this id and give it an active state
-        GameObject player = (GameObject)Instantiate(PlayerPrefab, new Vector3(1, 0, 1), Quaternion.identity);
-        player.GetComponent<PlayerController>().PlayerNumber = playerID;
-        
-
+    private void createPlayer(int playerID)
+    {
         int teamID = GetSmallestTeamId();
 
+        Vector3 position = GetTeamPosition(teamID);
+        // Create a new player with this id and give it an active state
+        GameObject player = (GameObject)Instantiate(PlayerPrefab, position, Quaternion.identity);
+        player.GetComponent<PlayerController>().PlayerNumber = playerID;
+        
+        //set the data.
         PlayerData playerData = new PlayerData {
             Player = player,
             PlayerID = playerID,
@@ -103,12 +107,20 @@ public class PlayerManager : MonoBehaviour {
 
         player.GetComponent<PlayerController>().TeamID = teamID;
 
+        //set the right texture.
         Texture2D texture = GetTexture(playerID, teamID);
-        SkinnedMeshRenderer renderer = player.GetComponentInChildren<SkinnedMeshRenderer>();
-        renderer.material.mainTexture = texture;
+        SkinnedMeshRenderer rendererInChildren = player.GetComponentInChildren<SkinnedMeshRenderer>();
+        rendererInChildren.material.mainTexture = texture;
 
         // And add it to the list
         PlayersData.Add(playerData);
+    }
+
+    //returns the spawning position for the team.
+    private Vector3 GetTeamPosition(int teamID)
+    {
+        //crappy version, todo make better later
+        return teamID == 1 ? BlueTeamSpawn : RedTeamSpawn;
     }
 
     private void deactivatePlayer(PlayerData playerData) {
@@ -119,11 +131,6 @@ public class PlayerManager : MonoBehaviour {
 
     private void activatePlayer(PlayerData playerData) {
         playerData.Player.SetActive(true);
-    }
-
-    //TODO Make variable on team, teamsize, etc.
-    private Vector3 GeneratePosition(PlayerData data) {
-        return new Vector3(1, 0, 1);
     }
 
     private int GetSmallestTeamId() {
