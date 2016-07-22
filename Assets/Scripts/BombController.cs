@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class BombController : MonoBehaviour
 {
     AudioController _ac;
 
-    public float LethalExplosionRange;
+    public float NonLethalExplosionRange = 30;
+    public float LethalExplosionRange = 15;
     public float ExplosionForce;
 
     public float MinDetonationTime;
@@ -33,6 +36,8 @@ public class BombController : MonoBehaviour
 
     void Start()
     {
+        if(NonLethalExplosionRange < LethalExplosionRange)
+            throw new Exception("NonLethalExplosionRange can't be smaller than LethalExplosionRange");
         _ac = GetComponent<AudioController>();
         SetDetonationTime();
         Blink();
@@ -87,7 +92,12 @@ public class BombController : MonoBehaviour
             if (hit.collider == player.GetComponent<Collider>())
             {
                 Debug.Log("Linecast hit a player");
-                player.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, LethalExplosionRange);
+                //within lethal range, players shuld "die".
+                if (hit.distance <= LethalExplosionRange)
+                    hit.collider.gameObject.GetComponent<PlayerController>().Die();
+                //otherwise we want to apply some force.
+                else 
+                    player.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, NonLethalExplosionRange);
             }
         }
 
