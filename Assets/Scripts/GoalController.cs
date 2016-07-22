@@ -19,9 +19,9 @@ public class GoalController : MonoBehaviour
 
     private void GoalScored(BallController ball)
     {
-        //int scoringTeamID = ball.LastTeamTouchedID;
         //Increases the Scores
-            Score.UpdateScore(1- TeamID); 
-        ball.Reset();
+        Score.UpdateScore(1- TeamID);
+        //reset the ball.
+        ball.Respawn();
     }
 }

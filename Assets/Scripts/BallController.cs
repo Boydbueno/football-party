@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class BallController : MonoBehaviour
 {
     public int LastTeamTouchedID { get; private set; }
+    public float RespawnTime = 0.5f;
 
     private Rigidbody _rb;
     private Vector3 _startPos;
@@ -19,12 +20,23 @@ public class BallController : MonoBehaviour
         ResetLTT();
 	}
 
-    public void Reset()
+    public void Respawn()
     {
+        GameManager.instance.Smoke(transform.position);
+        
+        transform.position = new Vector3(1000,1000,1000); //best way ever to remove the ball!
+        Invoke("Reset", RespawnTime);
+    }
+
+    private void Reset()
+    {
+        //reset the position and movement.
         transform.position = _startPos;
         _rb.velocity = Vector3.zero;
+        _rb.rotation = Quaternion.identity;
 
         ResetLTT();
+        GameManager.instance.Smoke(_startPos);
     }
 
     //resets the LastTeamTouchedID.
