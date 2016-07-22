@@ -137,6 +137,8 @@ public class PlayerManager : MonoBehaviour {
 
         // And add it to the list
         PlayersData.Add(playerData);
+
+        GameManager.instance.Smoke(player.transform.position);
     }
 
     //returns the spawning position for the team.
