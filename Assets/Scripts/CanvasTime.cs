@@ -5,16 +5,45 @@ using UnityEngine.UI;
 public class CanvasTime : MonoBehaviour {
 
 
+    public int minSwitchTime;
+    public int maxSwitchTime;
     public Text timeText;
     private float second;
     public float secondDuration;
 
+    public float shakeDuration;
+    public float switchTime;
     public int modeSwithTime;
-	// Use this for initialization
-	void Start ()
+    public bool toShake;
+
+    AudioController _ac;
+    // Use this for initialization
+    void Start()
     {
-        modeSwithTime = Random.Range(90, 180);
+        modeSwithTime = Random.Range(minSwitchTime, maxSwitchTime);
+        _ac = GetComponent<AudioController>();
     }
+
+    void Shake()
+    {
+        if (toShake)
+        {
+            switchTime += Time.deltaTime;
+            GameManager.instance.ScreenShake();
+            _ac.Play("Ding");
+            if (switchTime > shakeDuration)
+            {
+               
+                switchTime = 0;
+                modeSwithTime += Random.Range(minSwitchTime, maxSwitchTime);
+
+                PlayerManager.instance.ShuffleTeams();
+                toShake = false;
+            }
+        }
+    }
+
+
 
     // Update is called once per frame
     void Update()
@@ -28,7 +57,7 @@ public class CanvasTime : MonoBehaviour {
             string sec = curTime[1];
             int newTime = int.Parse(sec) + 1;
             string NewTime = newTime.ToString();
-            int minutes = int.Parse(min) + 1;
+            int minutes = int.Parse(min);
 
             //Handles minutes
             if (newTime >= 59)
@@ -38,6 +67,7 @@ public class CanvasTime : MonoBehaviour {
                 {
                     extra = "0";
                 }
+                minutes += 1;
                 min = extra + minutes.ToString();
                 newTime = 0;
             }
@@ -54,12 +84,14 @@ public class CanvasTime : MonoBehaviour {
             second = 0;
 
             //Switches Modes
-            int time = newTime + minutes*60;
+            int time = newTime + minutes * 60;
             if (time >= modeSwithTime)
             {
-                modeSwithTime += Random.Range(90, 180);
-                PlayerManager.instance.ShuffleTeams();
+                toShake = true;
+
             }
         }
+
+        Shake();
     }
 }

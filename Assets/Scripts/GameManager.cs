@@ -166,4 +166,12 @@ public class GameManager : MonoBehaviour {
         bomb.GetComponent<BombController>().SetDetonationTime();
     }
 
+    public void SpawnBall()
+    {
+        Ball.SetActive(true);
+
+        BallController ballControl = Ball.GetComponent<BallController>();
+        ballControl.Respawn();
+    }
+
 }

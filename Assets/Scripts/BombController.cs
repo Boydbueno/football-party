@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-public class BombController : MonoBehaviour {
+public class BombController : MonoBehaviour
+{
+
+    public float LethalExplosionRange;
+    public float ExplosionForce;
 
     public float MinDetonationTime;
     public float MaxdetonationTime;
@@ -9,15 +15,19 @@ public class BombController : MonoBehaviour {
     public float MaxBlinkingInterval;
     public float MinBlinkingInterval;
 
-    public bool BlinkOn = false;
+    public bool BlinkOn;
 
     public Renderer renderer;
+    public GameObject RadiusSphere;
     public Material BlinkOnMaterial;
     public Material BlinkOffMaterial;
 
     public float _detonationTime;
     private float _countDownDuration;
     private float _curBlinkInterval;
+
+    private bool _hasExploded = false;
+    
 
     void Start()
     {
@@ -29,7 +39,7 @@ public class BombController : MonoBehaviour {
     {
         _detonationTime -= Time.deltaTime;
         
-        if (_detonationTime <= 0) 
+        if (_detonationTime <= 0 && !_hasExploded) 
         {
             Explode();
         }
@@ -45,12 +55,30 @@ public class BombController : MonoBehaviour {
     //bomb goes boooooom!
     public void Explode() 
     {
-        // Todo: Spawn explosion
+        //spawn a sweet smoke explosion.
         GameManager.instance.Smoke(transform.position);
-        
+
+        // apply ExplosionForce to all players in range.
+        List<PlayerManager.PlayerData> players = GameManager.instance.GetComponentInChildren<PlayerManager>().PlayersData;
+        foreach (GameObject player in players.Select(t => t.Player))
+        {
+            RaycastHit hit;
+            Physics.Linecast(transform.position, player.transform.position, out hit);
+            if (hit.collider == player.GetComponent<Collider>())
+            {
+                Debug.Log("Linecast hit a player");
+                player.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, LethalExplosionRange);
+            }
+        }
+
+        // Put back the normal ball
+        GameManager.instance.SpawnBall();
+
+        _hasExploded = true;
+        //detroy the bomb.
         Destroy(this.gameObject);
 
-        // Put back the normal ball or start new game mode, whatever
+
     }
 
     void Blink()
@@ -61,9 +89,11 @@ public class BombController : MonoBehaviour {
         if (BlinkOn) {
             // Set one mesh
             renderer.material = BlinkOnMaterial;
+            RadiusSphere.SetActive(false);
         } else {
             // Set other mesh
             renderer.material = BlinkOffMaterial;
+            RadiusSphere.SetActive(true);
         }
 
         float pointInCountdown = _detonationTime/_countDownDuration;
