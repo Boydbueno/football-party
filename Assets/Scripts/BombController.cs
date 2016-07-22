@@ -49,28 +49,7 @@ public class BombController : MonoBehaviour
         _detonationTime -= Time.deltaTime;
         if (_detonationTime <= 0 && !_hasExploded)
         {
-            toShake = true;        
-        }
-
-        if (toShake)
-        {
-            switchTime += Time.deltaTime;
-            GameManager.instance.ScreenShake();
-
             Explode();
-            if (!bombExploding)
-            {
-                bombExploding = true;
-                _ac.Play("BOOM");
-            }
-            if (switchTime > 1)
-            {
-                switchTime = 0;
-                toShake = false;
-                bombExploding = false;
-                //detroy the bomb.
-                Destroy(this.gameObject, 2f);
-            }
         }
     }
 
@@ -111,6 +90,9 @@ public class BombController : MonoBehaviour
 
         toShake = true;
         _hasExploded = true;
+        _ac.Play("BOOM");
+        GameManager.instance.ScreenshakeForTime(2f);
+        Destroy(this.gameObject);
     }
 
     void Blink()

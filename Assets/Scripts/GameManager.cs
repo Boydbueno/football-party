@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour {
         if (screenShakeOn)
         {
             _n += increment;
+            ScreenShake();
         }
 
         if (Input.GetKeyDown("space")) {
@@ -157,6 +158,22 @@ public class GameManager : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         RumbleStop(playerIndex);
+    }
+
+    /// <summary>
+    /// Screenshake
+    /// </summary>
+    /// <param name="duration">The duration of the screenshake</param>
+    public void ScreenshakeForTime(float duration) 
+    {
+        screenShakeOn = true;
+        StartCoroutine(StopScreenshake(duration));
+    }
+
+    IEnumerator StopScreenshake(float time) 
+    {
+        yield return new WaitForSeconds(time);
+        screenShakeOn = false;
     }
 
     /// <summary>
