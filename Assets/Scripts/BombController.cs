@@ -75,7 +75,7 @@ public class BombController : MonoBehaviour
         }
 
         // Put back the normal ball
-        GameManager.instance.StartNormalMode();
+        GameManager.instance.GoToNormalMode();
 
         _hasExploded = true;
         //detroy the bomb.
