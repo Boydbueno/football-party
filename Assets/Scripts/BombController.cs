@@ -26,7 +26,8 @@ public class BombController : MonoBehaviour
     public float _detonationTime;
     private float _countDownDuration;
     private float _curBlinkInterval;
-
+    private bool toShake;
+    private float switchTime;
     private bool _hasExploded = false;
     
 
@@ -37,12 +38,29 @@ public class BombController : MonoBehaviour
         Blink();
     }
 
-    void Update() 
+    void Update()
     {
         _detonationTime -= Time.deltaTime;
-        if (_detonationTime <= 0 && !_hasExploded) 
+        if (_detonationTime <= 0 && !_hasExploded)
         {
+            toShake = true;        
+        }
+
+        if (toShake)
+        {
+            switchTime += Time.deltaTime;
+            GameManager.instance.ScreenShake();
+            
             Explode();
+            if (switchTime > 1)
+            {
+
+                switchTime = 0;
+                toShake = false;
+                //detroy the bomb.
+                _ac.Play("BOOM");
+                Destroy(this.gameObject, 2f);
+            }
         }
     }
 
@@ -59,7 +77,6 @@ public class BombController : MonoBehaviour
 
         //spawn a sweet smoke explosion.
         GameManager.instance.Explode(transform.position);
-        _ac.Play("BOOM");
 
         // apply ExplosionForce to all players in range.
         List<PlayerManager.PlayerData> players = GameManager.instance.GetComponentInChildren<PlayerManager>().PlayersData;
@@ -77,9 +94,9 @@ public class BombController : MonoBehaviour
         // Put back the normal ball
         GameManager.instance.GoToNormalMode();
 
+        toShake = true;
         _hasExploded = true;
-        //detroy the bomb.
-        Destroy(this.gameObject, 3f);
+      
     }
 
     void Blink()
