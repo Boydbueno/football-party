@@ -83,7 +83,7 @@ public class PlayerManager : MonoBehaviour {
         foreach (PlayerData playerData in PlayersData) {
             playerData.InactivityTimer += Time.deltaTime;
             // If an inactivity timer hits the max inactivity deactive the player
-            if (playerData.InactivityTimer >= MaxInactivityTime) {
+            if (playerData.InactivityTimer >= MaxInactivityTime && !playerData.Player.GetComponent<PlayerController>().IsDead) {
                 deactivatePlayer(playerData);
             }
         }
@@ -104,6 +104,7 @@ public class PlayerManager : MonoBehaviour {
         //loop through the list, destroying the players and creating the anew.
         foreach(PlayerData data in ActivePlayerList) { 
             //save reusable data.
+            data.Player.GetComponent<PlayerController>().Resurrect();
             int playerNumber = data.PlayerID;
             Vector3 position = data.Player.transform.position;
             //KILL. DIE.
