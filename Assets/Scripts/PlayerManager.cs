@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour {
@@ -13,6 +14,8 @@ public class PlayerManager : MonoBehaviour {
 
     public int TeamsCount;
 
+    public Vector3 BlueTeamSpawn, RedTeamSpawn;
+
     private Texture2D[] _textures;
 
     [System.Serializable]
@@ -21,6 +24,12 @@ public class PlayerManager : MonoBehaviour {
         public int PlayerID;
         public float InactivityTimer;
         public int TeamID;
+    }
+
+    public class PlayerCreationData
+    {
+        public int playerID;
+        public Vector3 Position = Vector3.zero;
     }
 
     public int maxPlayerCount;
@@ -43,7 +52,10 @@ public class PlayerManager : MonoBehaviour {
                 PlayerData playerData = PlayersData.Find(item => item.PlayerID == i);
 
                 if (playerData == null) {
-                    createPlayer(i);
+                    {
+                        PlayerCreationData data = new PlayerCreationData {playerID = i};
+                        createPlayer(data);
+                    }
                 } else if (!playerData.Player.activeSelf) {
                     activatePlayer(playerData);
                 }                
@@ -67,6 +79,8 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void ShuffleTeams() {
+
+        //shuffle the list to a random order.
         List<PlayerData> ActivePlayerList = PlayersData.FindAll(item => item.Player.activeSelf);
         PlayersData.Clear();    
         for (int i = 0; i < ActivePlayerList.Count; i++) {
@@ -76,25 +90,38 @@ public class PlayerManager : MonoBehaviour {
             ActivePlayerList[RandomIndex] = temp;
         }
 
+        //loop through the list, destroying the players and creating the anew.
         foreach(PlayerData data in ActivePlayerList) { 
+            //save reusable data.
             int playerNumber = data.PlayerID;
-
+            Vector3 position = data.Player.transform.position;
             //KILL. DIE.
             Destroy(data.Player);
             PlayersData.Remove(data);
-
-            createPlayer(playerNumber);
+            //create a new player.
+            PlayerCreationData createData = new PlayerCreationData {playerID = playerNumber, Position = position};
+            createPlayer(createData);
         }
     }
 
-    private void createPlayer(int playerID) {
-        // Create a new player with this id and give it an active state
-        GameObject player = (GameObject)Instantiate(PlayerPrefab, new Vector3(1, 0, 1), Quaternion.identity);
-        player.GetComponent<PlayerController>().PlayerNumber = playerID;
-        
-
+    private void createPlayer(PlayerCreationData data)
+    {
+        int playerID = data.playerID;
         int teamID = GetSmallestTeamId();
 
+        //get position
+        Vector3 position;
+        if (data.Position != Vector3.zero) //default value, if we haven't assigned a custom value.
+            position = data.Position;
+        else
+            position = GetTeamPosition(teamID);
+        
+
+        // Create a new player with this id and give it an active state
+        GameObject player = (GameObject)Instantiate(PlayerPrefab, position, Quaternion.identity);
+        player.GetComponent<PlayerController>().PlayerNumber = playerID;
+        
+        //set the data.
         PlayerData playerData = new PlayerData {
             Player = player,
             PlayerID = playerID,
@@ -103,12 +130,20 @@ public class PlayerManager : MonoBehaviour {
 
         player.GetComponent<PlayerController>().TeamID = teamID;
 
+        //set the right texture.
         Texture2D texture = GetTexture(playerID, teamID);
-        SkinnedMeshRenderer renderer = player.GetComponentInChildren<SkinnedMeshRenderer>();
-        renderer.material.mainTexture = texture;
+        SkinnedMeshRenderer rendererInChildren = player.GetComponentInChildren<SkinnedMeshRenderer>();
+        rendererInChildren.material.mainTexture = texture;
 
         // And add it to the list
         PlayersData.Add(playerData);
+    }
+
+    //returns the spawning position for the team.
+    private Vector3 GetTeamPosition(int teamID)
+    {
+        //crappy version, todo make better later
+        return teamID == 1 ? BlueTeamSpawn : RedTeamSpawn;
     }
 
     private void deactivatePlayer(PlayerData playerData) {
@@ -119,11 +154,6 @@ public class PlayerManager : MonoBehaviour {
 
     private void activatePlayer(PlayerData playerData) {
         playerData.Player.SetActive(true);
-    }
-
-    //TODO Make variable on team, teamsize, etc.
-    private Vector3 GeneratePosition(PlayerData data) {
-        return new Vector3(1, 0, 1);
     }
 
     private int GetSmallestTeamId() {
