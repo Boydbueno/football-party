@@ -75,9 +75,11 @@ public class BombController : MonoBehaviour
             if (hit.collider == player.GetComponent<Collider>())
             {
                 Debug.Log("Linecast hit a player");
+                //within lethal range, players shuld "die".
                 if (hit.distance <= LethalExplosionRange)
                     hit.collider.gameObject.GetComponent<PlayerController>().Die();
-                else
+                //otherwise we want to apply some force.
+                else 
                     player.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, NonLethalExplosionRange);
             }
         }
