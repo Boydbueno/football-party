@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="right">Rumble for right motor, float between 1 and 0</param>
     public void RumbleStart(PlayerIndex playerIndex, float left, float right) 
     {
-        GamePad.SetVibration(playerIndex, left, right);
+        //GamePad.SetVibration(playerIndex, left, right);
     }
 
     /// <summary>
