@@ -54,10 +54,10 @@ public class CanvasTime : MonoBehaviour {
             second = 0;
 
             //Switches Modes
-            int time = newTime + minutes;
-            if(time >= modeSwithTime)
+            int time = newTime + minutes*60;
+            if (time >= modeSwithTime)
             {
-                modeSwithTime = Random.Range(90, 180);
+                modeSwithTime += Random.Range(90, 180);
                 PlayerManager.instance.ShuffleTeams();
             }
         }
