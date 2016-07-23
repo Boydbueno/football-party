@@ -37,15 +37,15 @@ public class CanvasTime : MonoBehaviour {
                 switchTime = 0;
                 modeSwithTime += Random.Range(minSwitchTime, maxSwitchTime);
 
-                var value = Random.value;
-                if(value < 0.5)
-                {
+                //var value = Random.value;
+                //if(value < 0.5)
+                //{
                     GameManager.instance.StartBombMode();
-                }
-                else
-                {
-                    PlayerManager.instance.ShuffleTeams();
-                }
+                //}
+                //else
+                //{
+                //    PlayerManager.instance.ShuffleTeams();
+                //}
                 toShake = false;
             }
         }
